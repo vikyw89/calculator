@@ -1,48 +1,89 @@
 let memory = 0
 
-const add = (a, b) => {
-    return a + b
+const operateA = (arg) => {
+    const result = arg
+        .match(/(\-?|\+?)\d+\.?\d*/g)
+        .reduce((result, item)=> {
+        return result += Number(item)
+    },0)
+    return result
 }
 
-console.log(add(1,2,3,4,5))
-
-const substract = (a, b) => {
-    return a - b
+const operateMD = (arg) => {
+    const MD = arg
+        .replace(/((\-|\+?)\d+\.?\d*)(÷|x)((\-|\+?)\d+\.?\d*)/, ()=> {
+            const match = arg.match(/((\-|\+?)\d+\.?\d*)(÷|x)((\-|\+?)\d+\.?\d*)/)
+            if (match[3] === 'x') {
+                const result = Number(match[1]) * Number(match[4])
+                return result
+            } else if (match[3] === '÷') {
+                const result = Number(match[1]) / Number(match[4])
+                return result
+            }
+        })
+    if(arg === MD) {
+        return MD
+    } else {
+        return operateMD(MD)
+    }
 }
 
-const multiply = (a, b) => {
-    return a * b
+const operateP = (arg)=> {
+    const result = arg.replace(/\(([^\(]+)\)/, (item)=> {
+        const match = arg.match(/\(([^\(]+)\)/)
+        console.log(match)
+        return operateA(operateMD(match[1]))
+    })
+    return result
 }
 
-const divide = (a, b) => {
-    return a / b
+const operatePEMDA = (arg) => {
+    const autoComplete = arg.replace(/(?<=\d)(\()|(\))(?=\d)|(\%)/g, (item)=> {
+        if (item === '(') {
+            return 'x('
+        } else if (item === ')') {
+            return ')x'
+        } else if (item === '%') {
+            return '÷100'
+        }
+    })
+    return operateA(operateMD(operateP(autoComplete)))
 }
 
-console.log(add(2,2), substract(1,2), multiply(2,2), divide(2,2))
+console.log('operatePEMDA', operatePEMDA('25x4(-1x100%)'))
 
-const operate = (a, b, c) => {
-    return b(a,c)
+const screen1 = (arg) => {
+    const screen1 = document.querySelector('.screen1')
+    let display = screen1.textContent
+    display = `Ans = ${display ? 0 : result}`
 }
 
-const screen2Handler = (arg) => {
+const screen2 = (arg) => {
+    const screen2 = document.querySelector('.screen2')
+    let display = screen2.textContent
+    display += arg
+}
+
+const screenHandler = (arg) => {
     console.log(arg)
-    const numbers = ['1','2','3','4','5','6','7','8','9','0','.']
+    const valid = []
+    const value = ['1','2','3','4','5','6','7','8','9','0','.','-','+']
     const result = ['=']
-    const screen1 = document.querySelector('.screen-row1')
-    const screen2 = document.querySelector('.screen-row2')
+    const operator = ['^',]
+    
+    
     const button = document.querySelector(`button[data-key='${arg}']`)
-    if (screen2.textContent.length >= 12) {
-        return
-    }
+    button.classList.add('pressed' )
+    console.log(screen2.textContent)
+}
 
-    button ? button.classList.add('pressed') : null
-    if (numbers.includes(arg)) {
-        screen2.textContent += arg
-    }
+const removeClass = (arg) => {
+    const button = document.querySelector(`button[data-key='${arg}']`)
+    button ? button.classList.remove('pressed') : null
 }
 
 const mousedownHandler = (e) => {
-    screen2Handler(e.target.dataset.key)
+    screenHandler(e.target.dataset.key)
 }
 
 const mouseupHandler = (e) => {
@@ -50,17 +91,14 @@ const mouseupHandler = (e) => {
 }
 
 const keydownHandler = (e) => {
-    screen2Handler(e.key)
+    screenHandler(e.key)
 }
 
 const keyupHandler = (e) => {
     removeClass(e.key)
 }
 
-const removeClass = (arg) => {
-    const button = document.querySelector(`button[data-key='${arg}']`)
-    button ? button.classList.remove('pressed') : null
-}
+
 
 window.addEventListener('keydown', keydownHandler)
 window.addEventListener('keyup', keyupHandler)
@@ -69,5 +107,3 @@ document.querySelectorAll('button').forEach(item => {
     item.addEventListener('mousedown', mousedownHandler)
     item.addEventListener('mouseup', mouseupHandler)
 })
-
-console.log(operate(5,multiply,5))

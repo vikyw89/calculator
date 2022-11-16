@@ -52,24 +52,57 @@ footer {
     gap:10px;
 }
 
+.history-container {
+    flex: 1 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 20px;
+    gap:10px;
+}
+
+.history-container div {
+    border: #3c4043 1px solid;
+    width: 100%;
+    font-size: 25px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: 0.6s;
+    overflow: hidden;
+}
+
+.history-container div:hover {
+    border:#8ab4f8 2px solid;
+
+}
+
 .screen {
     grid-area: 1 / 1 / 2 / 5;
     height:100px;
     border-radius: 8px;
     border: 1px solid #3c4043;
     display:grid;
+    grid-template-rows: repeat(2, 1fr);
     align-items: center;
     justify-content: flex-end;
     padding: 10px;
+    text-align: end;
 }
 
 .screen1 {
     grid-row: 1 / 1;
+    text-overflow: clip;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .screen2 {
     grid-row: 2 / 2;
     font-size: 32px;
+    overflow: hidden;
+    text-align: end;
+    text-overflow: ellipsis;
 }
 
 .light {
@@ -86,14 +119,15 @@ footer {
 button {
     padding: 10px;
     font-size: 15px;
-    background: #3c4043;
+    background-color: #3c4043;
     color: #e8eaed;
     border: 1px solid #3c4043;
     border-radius: 4px;
     transition:0.5s;
 }
-
+button:hover {
+    border: #8ab4f8 1px solid;
+}
 .pressed {
     border: #8ab4f8 1px solid;
-    transform: scale(1.1)
 }

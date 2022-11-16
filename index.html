@@ -12,18 +12,14 @@
     </header>
     <main>
         <div class="grid-container">
-            <div class="screen grid-item">
-                <div class="screen1">
-                    
-                </div>
-                <div class="screen2">
-                    0
-                </div>
+            <div id="screen" class="screen grid-item">
+                <div class="screen1"></div>
+                <div class="screen2">0</div>
             </div>
             <button class="light grid-item" data-key="(">(</button>
             <button class="light grid-item" data-key=")">)</button>
             <button class="light grid-item" data-key="%">%</button>
-            <button class="light grid-item" data-key="CE">CE</button>
+            <button id="erase" class="light grid-item" data-key="CE">CE</button>
             <button class="grid-item" data-key="7">7</button>
             <button class="grid-item" data-key="8">8</button>
             <button class="grid-item" data-key="9">9</button>
@@ -42,7 +38,6 @@
             <button class="light grid-item" data-key="+">+</button>
         </div>
         <div class="history-container">
-            History
         </div>
     </main>
     <footer>

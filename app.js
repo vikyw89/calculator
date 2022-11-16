@@ -179,7 +179,7 @@ const screen2 = (arg) => {
                 default:
                     screen2.textContent += arg
                     break
-                case lastEntry === '÷' || lastEntry === 'x' || lastEntry === '(':
+                case lastEntry === '÷' || lastEntry === 'x' || lastEntry === '(' || lastEntry === '%':
                     break
             }
             break

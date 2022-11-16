@@ -1,7 +1,8 @@
 let memory = 0
-let toggleSUM = false
+let toggleEraser = false
 
 const operateA = (arg) => {
+    if (!arg) return infinity
     const result = arg
         .match(/(\-?|\+?)\d+\.?\d*/g)
         .reduce((result, item)=> {
@@ -39,19 +40,32 @@ const operateP = (arg)=> {
 }
 
 const operatePEMDA = (arg) => {
-    const autoComplete = arg.replace(/(?<=\d)(\()|(\))(?=\d)|(\%)/g, (item)=> {
-        if (item === '(') {
-            return 'x('
-        } else if (item === ')') {
-            return ')x'
-        } else if (item === '%') {
-            return '÷100'
+    let autoCompleteP = arg.replace(/(?<=\d)(\()|(\))(?=\d)|(\%)/g, (item)=> {
+        switch (true){
+            case item === '(':
+                return 'x('
+            case item === ')':
+                return ')x'
+            case item === '%':
+                return 'x1÷100'
         }
     })
-    return operateA(operateMD(operateP(autoComplete)))
-}
 
-console.log('operatePEMDA', operatePEMDA('25x4(-1x100%)'))
+    const leftPharentesis = autoCompleteP.match(/\(/g) ?? []
+    const leftPharentesisCount = leftPharentesis.length
+    const rightPharentesis = autoCompleteP.match(/\)/g) ?? []
+    const rightPharentesisCount = rightPharentesis.length
+    const difference = leftPharentesisCount - rightPharentesisCount
+    switch (true){
+        case difference !== 0:
+            for (let i = 0; i < difference; i++) {
+                autoCompleteP += ')'
+            }
+            break
+    }
+
+    return operateA(operateMD(operateP(autoCompleteP)))
+}
 
 const screen1 = (arg) => {
     const screen1 = document.querySelector('.screen1')
@@ -60,14 +74,17 @@ const screen1 = (arg) => {
 
 const toggle = (arg) => {
     const erase = document.querySelector('#erase')
-    if (arg === '=') {
-        erase.textContent = 'AC'
-        erase.dataset.key = 'AC'
-    } else {
-        erase.textContent = 'CE'
-        erase.dataset.key = 'CE'
+    switch (true){
+        case arg === '=':
+            erase.textContent = 'AC'
+            erase.dataset.key = 'AC'
+            break
+        default:
+            erase.textContent = 'CE'
+            erase.dataset.key = 'CE'
+            break
     }
-    toggleSUM = !toggleSUM
+    toggleEraser = !toggleEraser
 }
 
 const historyClickHandler = (e) => {
@@ -91,13 +108,13 @@ const history = (arg) => {
 const screen2 = (arg) => {
     const screen2 = document.querySelector('.screen2')
     screen2.textContent === '0' ? screen2.textContent = '' : null
-    if (toggleSUM === true) {
+    if (toggleEraser === true) {
         toggle(arg)
         screen1(`Ans = ${screen2.textContent}`)
     }
     
     const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
-
+    console.log(lastEntry)
     switch (true) {
         // Pharenthesis
         case arg === '(':
@@ -128,6 +145,10 @@ const screen2 = (arg) => {
                     break
                 case lastEntry === '(':
                     break
+                case !lastEntry:
+                    screen2.textContent += '0'
+                    screen2.textContent += arg
+                    break
             }
             break
         // Divider
@@ -143,6 +164,10 @@ const screen2 = (arg) => {
                     screen2.textContent += arg
                     break
                 case lastEntry === '(':
+                    break
+                case !lastEntry:
+                    screen2.textContent += '0'
+                    screen2.textContent += arg
                     break
             }
             break
@@ -211,21 +236,29 @@ const screen2 = (arg) => {
             break
         // Numbers
         default:
-            screen2.textContent += arg
-            break
+            switch (true) {
+                case lastEntry === '%':
+                    break
+                default:
+                    screen2.textContent += arg
+                    break
+            }
+
     }
 }
 
 const screenHandler = (arg) => {
-    // validate input
+    // Translate keyboard input
+    console.log(arg)
     screen2(arg)
+    addClass(arg)
 }
 
 const addClass = (arg) => {
     const button = document.querySelector(`button[data-key='${arg}']`)
     const screen = document.querySelector('#screen')
-    button.classList.add('pressed' )
     screen.classList.add('pressed')
+    button ? button.classList.add('pressed') : null
 }
 
 const removeClass = (arg) => {
@@ -238,7 +271,6 @@ const removeClass = (arg) => {
 
 const mousedownHandler = (e) => {
     screenHandler(e.target.dataset.key)
-    addClass(e.target.dataset.key)
 }
 
 const mouseupHandler = (e) => {
@@ -246,8 +278,27 @@ const mouseupHandler = (e) => {
 }
 
 const keydownHandler = (e) => {
-    screenHandler(e.key)
-    addClass(e.key)
+    const arg = e.key
+    switch (true){
+        case arg === 'Backspace':
+            screenHandler('CE')
+            break
+        case arg.search(/[0-9\-\=\+\%\.]/) != -1:
+            screenHandler(arg)
+            break
+        case arg === 'Escape':
+            screenHandler('AC')
+            break
+        case arg === '/':
+            screenHandler('÷')
+            break
+        case arg === '*':
+            screenHandler('x')
+            break
+        case arg === 'Enter':
+            screenHandler('=')
+            break
+    }
 }
 
 const keyupHandler = (e) => {

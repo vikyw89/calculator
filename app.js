@@ -239,7 +239,7 @@ const screen2 = (arg) => {
         // Numbers
         default:
             switch (true) {
-                case lastEntry === '%':
+                case lastEntry === '%'|| lastEntry === 'y':
                     break
                 default:
                     screen2.textContent += arg

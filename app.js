@@ -3,17 +3,21 @@ let toggleEraser = false
 
 
 const operateA = (arg) => {
-    const input = arg.match(/(\-?|\+?)\d+\.?\d*/g)
+    const input = arg.match(/([\-\+]?)\d+\.?\d*/g)
     if (!input) return Infinity
 
     const result = input.reduce((result, item)=> {
         return result += Number(item)
     },0)
+    console.table('operateA', arg, result)
     return result
 }
 
 const operateMD = (arg) => {
-    const MD = arg
+    if (arg.search(/[x÷]/) === -1){
+        return arg
+    }
+    const result = arg
         .replace(/((\-|\+?)\d+\.?\d*)(÷|x)((\-|\+?)\d+\.?\d*)/, ()=> {
             const match = arg.match(/((\-|\+?)\d+\.?\d*)(÷|x)((\-|\+?)\d+\.?\d*)/)
             if (match[3] === 'x') {
@@ -24,20 +28,19 @@ const operateMD = (arg) => {
                 return result
             }
         })
-    if(arg === MD) {
-        return MD
-    } else {
-        return operateMD(MD)
-    }
+    return operateMD(result)
 }
 
 const operateP = (arg)=> {
-    const result = arg.replace(/\(([^\(]+)\)/, (item)=> {
-        const match = arg.match(/\(([^\(]+)\)/)
-        console.log(match)
-        return operateA(operateMD(match[1]))
+    if (arg.search(/[\)\()]/) === -1) {
+        return arg
+    }
+    const result = arg.replace(/\([^\(\)]*\)/g, (item)=> {
+        const match = item.replace(/[\(\)]/, '')
+        return operateA(operateMD(match))
     })
-    return result
+    console.table('operateP', arg, result)
+    return operateP(result)
 }
 
 const operatePEMDA = (arg) => {
@@ -66,8 +69,10 @@ const operatePEMDA = (arg) => {
             }
             break
     }
-
-    return operateA(operateMD(operateP(autoCompleteP)))
+    
+    const result = operateA(operateMD(operateP(autoCompleteP)))
+    console.table('operatePEMDA', autoCompleteP, result)
+    return result
 }
 
 const screen1 = (arg) => {
@@ -256,8 +261,6 @@ const screen2 = (arg) => {
 }
 
 const screenHandler = (arg) => {
-    // Translate keyboard input
-    console.log(arg)
     screen2(arg)
     addClass(arg)
 }

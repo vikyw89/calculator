@@ -2,10 +2,10 @@ let memory = 0
 let toggleEraser = false
 
 const operateA = (arg) => {
-    if (!arg) return infinity
-    const result = arg
-        .match(/(\-?|\+?)\d+\.?\d*/g)
-        .reduce((result, item)=> {
+    const input = arg.match(/(\-?|\+?)\d+\.?\d*/g)
+    if (!input) return Infinity
+
+    const result = input.reduce((result, item)=> {
         return result += Number(item)
     },0)
     return result
@@ -40,6 +40,8 @@ const operateP = (arg)=> {
 }
 
 const operatePEMDA = (arg) => {
+    if (arg.search(/Infinity/) === 0 ) return 'Infinity'
+
     let autoCompleteP = arg.replace(/(?<=\d)(\()|(\))(?=\d)|(\%)/g, (item)=> {
         switch (true){
             case item === '(':
@@ -304,8 +306,6 @@ const keydownHandler = (e) => {
 const keyupHandler = (e) => {
     removeClass(e.key)
 }
-
-
 
 window.addEventListener('keydown', keydownHandler)
 window.addEventListener('keyup', keyupHandler)

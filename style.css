@@ -11,6 +11,7 @@
     outline: #8ab4f8 1px solid;
     outline-offset: -1px;
     */
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 
 html {
@@ -133,4 +134,5 @@ button:hover {
 }
 .pressed {
     border: #8ab4f8 1px solid;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }

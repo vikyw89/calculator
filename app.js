@@ -221,9 +221,15 @@ const screen2 = (arg) => {
             break
         // CE
         case arg === 'CE':
-            screen2.textContent = screen2.textContent.match(/.*(?=.$)/)
-            !screen2.textContent ? screen2.textContent = 0 : null
-            console.log('screen2textcontent',screen2.textContent)
+            switch (true) {
+                case lastEntry === 'y':
+                    screen2.textContent = '0'
+                    break
+                default:
+                    screen2.textContent = screen2.textContent.match(/.*(?=.$)/)
+                    !screen2.textContent ? screen2.textContent = 0 : null
+                    break
+            }
             break
         // AC
         case arg === 'AC':
@@ -246,7 +252,6 @@ const screen2 = (arg) => {
                     screen2.textContent += arg
                     break
             }
-
     }
 }
 

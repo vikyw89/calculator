@@ -12,33 +12,33 @@
     </header>
     <main>
         <div class="grid-container">
-            <div class="screen">
-                <div class="screen-row1">
-                </div>
-                <div class="screen-row2">
-                </div>
+            <div id="screen" class="screen grid-item">
+                <div class="screen1"></div>
+                <div class="screen2">0</div>
             </div>
-            <button data-key="esc">AC</button>
-            <button data-key="Backspace">C</button>
-            <button data-key="%">%</button>
-            <button data-key="/">/</button>
-            <button data-key="7">7</button>
-            <button data-key="8">8</button>
-            <button data-key="9">9</button>
-            <button data-key="+">+</button>
-            <button data-key="4">4</button>
-            <button data-key="5">5</button>
-            <button data-key="6">6</button>
-            <button data-key="-">-</button>
-            <button data-key="1">1</button>
-            <button data-key="2">2</button>
-            <button data-key="3">3</button>
-            <button data-key="*">x</button>
-            <button data-key="0">0</button>
-            <button data-key=".">.</button>
-            <button data-key="Enter" id="equal">=</button>
+            <button class="light grid-item" data-key="(">(</button>
+            <button class="light grid-item" data-key=")">)</button>
+            <button class="light grid-item" data-key="%">%</button>
+            <button id="erase" class="light grid-item" data-key="CE">CE</button>
+            <button class="grid-item" data-key="7">7</button>
+            <button class="grid-item" data-key="8">8</button>
+            <button class="grid-item" data-key="9">9</button>
+            <button class="light grid-item" data-key="÷">÷</button>
+            <button class="grid-item" data-key="4">4</button>
+            <button class="grid-item" data-key="5">5</button>
+            <button class="grid-item" data-key="6">6</button>
+            <button class="light grid-item" data-key="x">x</button>
+            <button class="grid-item" data-key="1">1</button>
+            <button class="grid-item" data-key="2">2</button>
+            <button class="grid-item" data-key="3">3</button>
+            <button class="light grid-item" data-key="-">-</button>
+            <button class="grid-item" data-key="0">0</button>
+            <button class="grid-item" data-key=".">.</button>
+            <button class="equal grid-item" data-key="=">=</button>
+            <button class="light grid-item" data-key="+">+</button>
         </div>
-        
+        <div class="history-container">
+        </div>
     </main>
     <footer>
         Made by Viky for The Odin Project 2022

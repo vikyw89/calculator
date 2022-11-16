@@ -1,6 +1,7 @@
 let memory = 0
 let toggleEraser = false
 
+
 const operateA = (arg) => {
     const input = arg.match(/(\-?|\+?)\d+\.?\d*/g)
     if (!input) return Infinity

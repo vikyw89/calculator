@@ -45,18 +45,7 @@ const operateP = (arg)=> {
 
 const operatePEMDA = (arg) => {
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
-
-    let autoCompleteP = arg.replace(/(?<=\d)(\()|(\))(?=\d)|(\%)/g, (item)=> {
-        switch (true){
-            case item === '(':
-                return 'x('
-            case item === ')':
-                return ')x'
-            case item === '%':
-                return 'x1÷100'
-        }
-    })
-
+    let autoCompleteP = arg
     const leftPharentesis = autoCompleteP.match(/\(/g) ?? []
     const leftPharentesisCount = leftPharentesis.length
     const rightPharentesis = autoCompleteP.match(/\)/g) ?? []
@@ -70,12 +59,26 @@ const operatePEMDA = (arg) => {
             break
     }
     
+    autoCompleteP = autoCompleteP.replace(/((?<=[^-+x÷])\()|(\)(?=[^-+x÷\()])|(%))/g, (item)=> {
+        switch (true){
+            case item === '(':
+                return 'x('
+            case item === ')':
+                return ')x'
+            case item === '%':
+                return 'x1÷100'
+        }
+    })
     const result = operateA(operateMD(operateP(autoCompleteP)))
+
+    history(`${autoCompleteP} = ${result}`)
+    topScreen(`${autoCompleteP} =`)
+    
     console.table('operatePEMDA', autoCompleteP, result)
     return result
 }
 
-const screen1 = (arg) => {
+const topScreen = (arg) => {
     const screen1 = document.querySelector('.screen1')
     screen1.textContent = arg
 }
@@ -113,12 +116,12 @@ const history = (arg) => {
 }
 
 
-const screen2 = (arg) => {
+const bottomScreen = (arg) => {
     const screen2 = document.querySelector('.screen2')
     screen2.textContent === '0' ? screen2.textContent = '' : null
     if (toggleEraser === true) {
         toggle(arg)
-        screen1(`Ans = ${screen2.textContent}`)
+        topScreen(`Ans = ${screen2.textContent}`)
     }
     
     const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
@@ -186,6 +189,10 @@ const screen2 = (arg) => {
                     break
                 case lastEntry === '÷' || lastEntry === 'x' || lastEntry === '(' || lastEntry === '%':
                     break
+                case !lastEntry:
+                    screen2.textContent += 0
+                    screen2.textContent += arg
+                    break
             }
             break
         // Addition
@@ -217,10 +224,18 @@ const screen2 = (arg) => {
             break
         // dot
         case arg === '.':
-            const lastValue = screen2.textContent.search(/(?<=[+\-x÷]|\b)\d*\.\d*$/)
             switch(true) {
-                case lastValue === -1:
-                    screen2.textContent += arg
+                case lastEntry === '.':
+                    break
+                case !lastEntry:
+                    screen2.textContent = '0.'
+                    break
+                default:
+                    const lastValue = screen2.textContent.search(/\d+\.\d*$/)
+                    switch (true) {
+                        case lastValue === -1:
+                            screen2.textContent += arg 
+                    }
                     break
             }
             break
@@ -243,8 +258,6 @@ const screen2 = (arg) => {
         // Equal
         case arg === '=':
             const result = operatePEMDA(screen2.textContent)
-            history(`${screen2.textContent} = ${result}`)
-            screen1(`${screen2.textContent} =`)
             screen2.textContent = result
             toggle(arg)
             break
@@ -261,7 +274,7 @@ const screen2 = (arg) => {
 }
 
 const screenHandler = (arg) => {
-    screen2(arg)
+    bottomScreen(arg)
     addClass(arg)
 }
 

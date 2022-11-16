@@ -285,7 +285,7 @@ const keydownHandler = (e) => {
         case arg === 'Backspace':
             screenHandler('CE')
             break
-        case arg.search(/[0-9\-\=\+\%\.]/) != -1:
+        case arg.search(/[0-9\-\=\+\%\.]/) === 0:
             screenHandler(arg)
             break
         case arg === 'Escape':

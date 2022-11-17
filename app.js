@@ -128,7 +128,7 @@ const bottomScreen = (arg) => {
     const screen2 = document.querySelector('.screen2')
     screen2.textContent === '0' ? screen2.textContent = null : null
     const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
-    const [lastValue] = screen2.textContent.match(/[+-]?[\d∞]+\.?\d*$/) ?? ''
+    const [lastValue] = screen2.textContent.match(/[^()x÷]+$/) ?? ''
     if (toggleEraser) {
         toggle(arg)
         topScreen(`Ans = ${screen2.textContent}`)

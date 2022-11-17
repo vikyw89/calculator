@@ -2,10 +2,12 @@ let memory = 0
 let toggleEraser = false
 
 const operateA = (arg) => {
+    // Break Case, stop if there's infinity
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
     const input = arg.match(/(?<value>[-+]?\d+\.?\d*)/g)
     if (!input) return Infinity
 
+    // Sum all of the value
     const result = input.reduce((result, item)=> {
         return result += Number(item)
     },0)
@@ -13,12 +15,15 @@ const operateA = (arg) => {
 }
 
 const operateMD = (arg) => {
+    // Break Case, stop if there's infinity or no more MD operator left
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
     if (arg.search(/[x÷]/) === -1){
         return arg
     }
+
+    // Solving 1 Multiplication or 1 Division operation recursively
     const result = arg
-        .replace(/(?<value1>[-+]?\d+\.?\d*)(?<operator>[÷x])(?<value2>[-+]?\d+\.?\d*)/g, (item)=> {
+        .replace(/(?<value1>[-+]?\d+\.?\d*)(?<operator>[÷x])(?<value2>[-+]?\d+\.?\d*)/, (item)=> {
             const match = item.match(/(?<value1>[-+]?\d+\.?\d*)(?<operator>[÷x])(?<value2>[-+]?\d+\.?\d*)/)
             if (match.groups.operator === 'x') {
                 const result = Number(match.groups.value1) * Number(match.groups.value2)
@@ -32,11 +37,14 @@ const operateMD = (arg) => {
 }
 
 const operateP = (arg)=> {
+    // Break Case, stop if there's infinity or no more pharentesis left
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
-    if (arg.search(/[)(]/) === -1) {
+    if (arg.search(/[()]/) === -1) {
         return arg
     }
-    const result = arg.replace(/\([^()]*\)/g, (item)=> {
+
+    // Solving 1 parenthesis recursively
+    const result = arg.replace(/\([^()]*\)/, (item)=> {
         const match = item.replace(/[()]/, '')
         return operateA(operateMD(match)).toLocaleString().replace(/\,/g,'')
     })
@@ -44,22 +52,26 @@ const operateP = (arg)=> {
 }
 
 const operatePEMDA = (arg) => {
+    // Break Case, stop if there's infinity
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
-    let autoCompleteP = arg
-    const leftPharentesis = autoCompleteP.match(/\(/g) ?? []
+
+    // Autocomplete user formula, adding pharanthesis where needed
+    let autoComplete = arg
+    const leftPharentesis = autoComplete.match(/\(/g) ?? []
     const leftPharentesisCount = leftPharentesis.length
-    const rightPharentesis = autoCompleteP.match(/\)/g) ?? []
+    const rightPharentesis = autoComplete.match(/\)/g) ?? []
     const rightPharentesisCount = rightPharentesis.length
     const difference = leftPharentesisCount - rightPharentesisCount
     switch (true){
         case difference !== 0:
             for (let i = 0; i < difference; i++) {
-                autoCompleteP += ')'
+                autoComplete += ')'
             }
             break
     }
     
-    autoCompleteP = autoCompleteP.replace(/((?<=[^-+x÷])\()|(\)(?=[^-+x÷\()])|(%))/g, (item)=> {
+    // Autocomplete user formula, adding x and translating % where needed
+    autoComplete = autoComplete.replace(/((?<=[^-+x÷])\()|(\)(?=[^-+x÷\()])|(%))/g, (item)=> {
         switch (true){
             case item === '(':
                 return 'x('
@@ -69,7 +81,9 @@ const operatePEMDA = (arg) => {
                 return 'x1÷100'
         }
     })
-    const result = operateA(operateMD(operateP(autoCompleteP)))
+
+    // Solving equation, starting from Pharenthesis -> MD -> addition
+    const result = operateA(operateMD(operateP(autoComplete)))
     return result
 }
 

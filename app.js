@@ -129,6 +129,7 @@ const bottomScreen = (arg) => {
     screen2.textContent === '0' ? screen2.textContent = null : null
     const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
     const [lastValue] = screen2.textContent.match(/[^()x÷]+$/) ?? ''
+    console.log(lastValue)
     if (toggleEraser) {
         toggle(arg)
         topScreen(`Ans = ${screen2.textContent}`)
@@ -238,7 +239,7 @@ const bottomScreen = (arg) => {
                 case !lastEntry:
                     screen2.textContent = '0.'
                     break
-                case lastValue.search(/[.]/) === 0:
+                case lastValue.search(/[.]/) === 1:
                     break
                 default:
                     screen2.textContent += arg 

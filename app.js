@@ -1,6 +1,6 @@
 let toggleEraser = false
 
-console.log(+3.3 * +3)
+
 const operateA = (arg) => {
     // Break Case
     const input = arg
@@ -11,8 +11,8 @@ const operateA = (arg) => {
     const result = input.reduce((result, item)=> {
         return result += +item
     },0)
-    console.log('A',result)
-    return result
+    console.log('A',+result)
+    return result.toLocaleString('fullwide', { useGrouping: false}).replace('∞', Infinity)
 }
 
 const operateMD = (arg) => {
@@ -30,10 +30,10 @@ const operateMD = (arg) => {
             console.log('MDresult', match)
             switch (true) {
                 case match.groups.operator === 'x':
-                    temp = +match.groups.value1 * +match.groups.value2
+                    temp = (+match.groups.value1 * +match.groups.value2 )
                     return temp
                 case match.groups.operator === '÷':
-                    temp = +match.groups.value1 / +match.groups.value2
+                    temp = (+match.groups.value1 / +match.groups.value2 )
                     return temp
             }
         })
@@ -55,6 +55,7 @@ const operateP = (arg)=> {
     })
     return operateP(result)
 }
+
 
 const operatePEMDA = (arg) => {
     // Autocomplete user formula, adding pharanthesis where needed
@@ -87,7 +88,7 @@ const operatePEMDA = (arg) => {
     // Solving equation, starting from Pharenthesis -> MD -> addition
     const result = operateA(operateMD(operateP(autoComplete)))
     console.log('PEMDA', result)
-    return result
+    return Number(result)
 }
 
 const topScreen = (arg) => {
@@ -246,9 +247,10 @@ const bottomScreen = (arg) => {
             break
         // CE
         case arg === 'CE':
+            console.log(lastValue, lastEntry)
             switch (true) {
                 case lastEntry === 'y':
-                    screen2.textContent.replace('Infinity','')
+                    screen2.textContent = screen2.textContent.replace('Infinity','')
                     break
                 default:
                     screen2.textContent = screen2.textContent.match(/.*(?=.$)/)
@@ -263,7 +265,7 @@ const bottomScreen = (arg) => {
         // Equal
         case arg === '=':
             switch (true) {
-                case lastEntry.search(/[\d.)%]/) === 0:
+                case (/[\d.)%]/).test(lastEntry):
                     const result = operatePEMDA(screen2.textContent)
                     history(`${screen2.textContent} = ${result}`)
                     topScreen(`${screen2.textContent} =`)
@@ -271,6 +273,7 @@ const bottomScreen = (arg) => {
                     toggle(arg)
                     break
             }
+            !screen2.textContent ? screen2.textContent = 0 : null
             break
         // Numbers
         default:

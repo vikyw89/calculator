@@ -3,7 +3,7 @@ let toggleEraser = false
 
 const operateA = (arg) => {
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
-    const input = arg.match(/([\-\+]?)\d+\.?\d*/g)
+    const input = arg.match(/([-+]?)\d+\.?\d*/g)
     if (!input) return Infinity
 
     const result = input.reduce((result, item)=> {
@@ -18,8 +18,9 @@ const operateMD = (arg) => {
         return arg
     }
     const result = arg
-        .replace(/((\-|\+?)\d+\.?\d*)(÷|x)((\-|\+?)\d+\.?\d*)/, ()=> {
-            const match = arg.match(/((\-|\+?)\d+\.?\d*)(÷|x)((\-|\+?)\d+\.?\d*)/)
+        .replace(/(([-+]?)\d+\.?\d*)([÷x])(([-+]?)\d+\.?\d*)/, (item)=> {
+            console.log(item)
+            const match = arg.match(/(([-+]?)\d+\.?\d*)([÷x])(([-+]?)\d+\.?\d*)/)
             if (match[3] === 'x') {
                 const result = Number(match[1]) * Number(match[4])
                 return result.toLocaleString().replace(/\,/g,'')
@@ -33,11 +34,11 @@ const operateMD = (arg) => {
 
 const operateP = (arg)=> {
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
-    if (arg.search(/[\)\()]/) === -1) {
+    if (arg.search(/[)(]/) === -1) {
         return arg
     }
-    const result = arg.replace(/\([^\(\)]*\)/g, (item)=> {
-        const match = item.replace(/[\(\)]/, '')
+    const result = arg.replace(/\([^()]*\)/g, (item)=> {
+        const match = item.replace(/[()]/, '')
         return operateA(operateMD(match)).toLocaleString().replace(/\,/g,'')
     })
     return operateP(result).toLocaleString().replace(/\,/g,'')

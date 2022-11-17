@@ -63,6 +63,9 @@ footer {
     padding: 20px;
     gap:10px;
     min-height: 300px;
+    text-overflow: clip;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .history-container div {
@@ -72,7 +75,9 @@ footer {
     padding: 10px;
     border-radius: 8px;
     transition: 0.3s;
+    text-overflow: clip;
     overflow: hidden;
+    text-overflow: ellipsis;
     text-align: end;
 }
 

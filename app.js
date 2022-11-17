@@ -46,7 +46,6 @@ const operateP = (arg)=> {
 const operatePEMDA = (arg) => {
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
     let autoCompleteP = arg
-    console.log(autoCompleteP)
     const leftPharentesis = autoCompleteP.match(/\(/g) ?? []
     const leftPharentesisCount = leftPharentesis.length
     const rightPharentesis = autoCompleteP.match(/\)/g) ?? []
@@ -95,9 +94,7 @@ const toggle = (arg) => {
 }
 
 const historyClickHandler = (e) => {
-    console.log(e.target.textContent)
     const result = e.target.textContent.match(/(.*\=)\s(.*)/)
-    console.log(result)
     topScreen(result[1])
     const screen2 = document.querySelector('.screen2')
     screen2.textContent = result[2]

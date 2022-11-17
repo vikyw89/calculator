@@ -1,62 +1,63 @@
 let toggleEraser = false
 
+console.log(+3.3 * +3)
 const operateA = (arg) => {
     // Break Case
-    const input = arg.match(/(?<value>[-+]?[\d∞]+\.?[\d∞]*)/g)
-    if (!input) return '∞'
-    if (arg === NaN) return NaN
-
+    const input = arg
+        .match(/(?<value>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValue>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinity>[-+]?Infinity)/g)
+    if (!input) return Infinity
+    console.log(input)
     // Sum all of the value
     const result = input.reduce((result, item)=> {
-        return result += Number(item.replace('∞', Infinity))
+        return result += +item
     },0)
-    return result.toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
+    console.log('A',result)
+    return result
 }
 
 const operateMD = (arg) => {
     // Break Case, no more MD operator left
-    if (arg === NaN) return NaN
     if (arg.search(/[x÷]/) === -1){
+        console.log('MD',arg)
         return arg
     }
 
     // Solving 1 Multiplication or 1 Division operation recursively
     const result = arg
-        .replace(/(?<value1>[-+]?[\d∞]+\.?[\d∞]*)(?<operator>[÷x])(?<value2>[-+]?[\d∞]+\.?[\d∞]*)/, (item)=> {
-            const match = item.match(/(?<value1>[-+]?[\d∞]+\.?[\d∞]*)(?<operator>[÷x])(?<value2>[-+]?[\d∞]+\.?[\d∞]*)/)
-            match.groups.value1.replace('∞', Infinity)
-            match.groups.value2.replace('∞', Infinity)
+        .replace(/(?<value1>(?<valueL>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueL>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityL>[-+]?Infinity))(?<operator>[÷x])(?<value2>(?<valueR>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueR>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityR>[-+]?Infinity))/, (item)=> {
+            const match = item.match(/(?<value1>(?<valueL>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueL>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityL>[-+]?Infinity))(?<operator>[÷x])(?<value2>(?<valueR>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueR>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityR>[-+]?Infinity))/)
             let temp = 0
+            console.log('MDresult', match)
             switch (true) {
                 case match.groups.operator === 'x':
-                    temp = Number(match.groups.value1) * Number(match.groups.value2)
-                    return temp.toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
+                    temp = +match.groups.value1 * +match.groups.value2
+                    return temp
                 case match.groups.operator === '÷':
-                    temp = Number(match.groups.value1) / Number(match.groups.value2)
-                    return temp.toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
+                    temp = +match.groups.value1 / +match.groups.value2
+                    return temp
             }
         })
-    return operateMD(result).toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
+    console.log('MDresult2',result)
+    return operateMD(result)
 }
 
 const operateP = (arg)=> {
     // Break Case, no more pharentesis left
     if (arg.search(/[()]/) === -1) {
+        console.log('P',arg)
         return arg
     }
-    if (arg === NaN) return NaN
 
     // Solving 1 parenthesis recursively
     const result = arg.replace(/\([^()]*\)/, (item)=> {
         const match = item.replace(/[()]/, '')
-        return operateA(operateMD(match)).toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
+        return operateA(operateMD(match))
     })
-    return operateP(result).toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
+    return operateP(result)
 }
 
 const operatePEMDA = (arg) => {
     // Autocomplete user formula, adding pharanthesis where needed
-    if (arg === NaN) return NaN
     let autoComplete = arg
     const leftPharentesis = autoComplete.match(/\(/g) ?? []
     const leftPharentesisCount = leftPharentesis.length
@@ -72,7 +73,7 @@ const operatePEMDA = (arg) => {
     }
     
     // Autocomplete user formula, adding x and translating % where needed
-    autoComplete = autoComplete.replace(/((?<=[^-+x÷])\()|(\)(?=[^-+x÷\()])|(%))/g, (item)=> {
+    autoComplete = autoComplete.replace(/(?<closingParenthesis>(?<=[^-+x÷])\()|(?<openingParenthesis>\)(?=[^-+x÷\()]))|(?<percent>%)/g, (item)=> {
         switch (true){
             case item === '(':
                 return 'x('
@@ -85,7 +86,8 @@ const operatePEMDA = (arg) => {
 
     // Solving equation, starting from Pharenthesis -> MD -> addition
     const result = operateA(operateMD(operateP(autoComplete)))
-    return result.toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
+    console.log('PEMDA', result)
+    return result
 }
 
 const topScreen = (arg) => {
@@ -140,7 +142,8 @@ const bottomScreen = (arg) => {
             screen2.textContent += arg
             break
         case arg === ')':
-            const leftPharentesisCount = screen2.textContent.match(/\(/g).length
+            const leftPharentesis = screen2.textContent.match(/\(/g) ?? []
+            const leftPharentesisCount = leftPharentesis.length
             const rightPharentesis = screen2.textContent.match(/\)/g) ?? []
             const rightPharentesisCount = rightPharentesis.length
             switch (true){
@@ -148,6 +151,7 @@ const bottomScreen = (arg) => {
                     screen2.textContent += arg
                     break
             }
+            !screen2.textContent ? screen2.textContent = 0 : null
             break
         // Multiplier
         case arg === 'x':
@@ -155,13 +159,11 @@ const bottomScreen = (arg) => {
                 default:
                     screen2.textContent += arg
                     break
-                case lastEntry === 'x':
+                case lastEntry === 'x'|| lastEntry === '-' || lastEntry === '(':
                     break
                 case lastEntry === '÷':
                     screen2.textContent = screen2.textContent.match(/.*(?=.$)/)
                     screen2.textContent += arg
-                    break
-                case lastEntry === '(':
                     break
                 case !lastEntry:
                     screen2.textContent += '0'
@@ -175,13 +177,11 @@ const bottomScreen = (arg) => {
                 default:
                     screen2.textContent += arg
                     break
-                case lastEntry === '÷'|| lastEntry === '(':
+                case lastEntry === '÷'|| lastEntry === '(' || lastEntry === '-':
                     break
                 case lastEntry === 'x':
                     screen2.textContent = screen2.textContent.match(/.*(?=.$)/)
                     screen2.textContent += arg
-                    break
-                case lastEntry === '(':
                     break
                 case !lastEntry:
                     screen2.textContent += '0'
@@ -237,7 +237,7 @@ const bottomScreen = (arg) => {
                 case !lastEntry:
                     screen2.textContent = '0.'
                     break
-                case lastValue.match(/[.]/) !== null:
+                case (/[.]/).test(lastValue):
                     break
                 default:
                     screen2.textContent += arg 
@@ -246,7 +246,14 @@ const bottomScreen = (arg) => {
             break
         // CE
         case arg === 'CE':
-            screen2.textContent = screen2.textContent.match(/.*(?=.$)/)
+            switch (true) {
+                case lastEntry === 'y':
+                    screen2.textContent.replace('Infinity','')
+                    break
+                default:
+                    screen2.textContent = screen2.textContent.match(/.*(?=.$)/)
+                    break
+            }
             !screen2.textContent ? screen2.textContent = 0 : null
             break
         // AC
@@ -268,7 +275,7 @@ const bottomScreen = (arg) => {
         // Numbers
         default:
             switch (true) {
-                case lastEntry === '%'|| lastEntry === '∞':
+                case lastEntry === '%':
                     break
                 case lastValue === "0":
                     break

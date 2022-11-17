@@ -1,21 +1,22 @@
 let toggleEraser = false
-let trial = Infinity
-console.log(trial.toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21}) )
+let trial = (Infinity / Infinity) * 2
+console.log(Number(trial))
 const operateA = (arg) => {
-    // Break Case, stop if there's infinity
+    // Break Case
     const input = arg.match(/(?<value>[-+]?[\d∞]+\.?[\d∞]*)/g)
-    if ((arg.search(/∞/) === 0 ) || (!input)) return '∞'
+    if (!input) return '∞'
+    if (arg === NaN) return NaN
 
     // Sum all of the value
     const result = input.reduce((result, item)=> {
-        return result += Number(item)
+        return result += Number(item.replace('∞', Infinity))
     },0)
     return result.toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
 }
 
 const operateMD = (arg) => {
-    // Break Case, stop if there's infinity or no more MD operator left
-    if (arg.search(/∞/) === 0 ) return '∞'
+    // Break Case, no more MD operator left
+    if (arg === NaN) return NaN
     if (arg.search(/[x÷]/) === -1){
         return arg
     }
@@ -24,6 +25,8 @@ const operateMD = (arg) => {
     const result = arg
         .replace(/(?<value1>[-+]?[\d∞]+\.?[\d∞]*)(?<operator>[÷x])(?<value2>[-+]?[\d∞]+\.?[\d∞]*)/, (item)=> {
             const match = item.match(/(?<value1>[-+]?[\d∞]+\.?[\d∞]*)(?<operator>[÷x])(?<value2>[-+]?[\d∞]+\.?[\d∞]*)/)
+            match.groups.value1.replace('∞', Infinity)
+            match.groups.value2.replace('∞', Infinity)
             let temp = 0
             switch (true) {
                 case match.groups.operator === 'x':
@@ -38,11 +41,11 @@ const operateMD = (arg) => {
 }
 
 const operateP = (arg)=> {
-    // Break Case, stop if there's infinity or no more pharentesis left
-    if (arg.search(/∞/) === 0 ) return '∞'
+    // Break Case, no more pharentesis left
     if (arg.search(/[()]/) === -1) {
         return arg
     }
+    if (arg === NaN) return NaN
 
     // Solving 1 parenthesis recursively
     const result = arg.replace(/\([^()]*\)/, (item)=> {
@@ -53,11 +56,8 @@ const operateP = (arg)=> {
 }
 
 const operatePEMDA = (arg) => {
-    console.log(arg)
-    // Break Case, stop if there's infinity
-    if (arg.search(/∞/) === 0 ) return '∞'
-
     // Autocomplete user formula, adding pharanthesis where needed
+    if (arg === NaN) return NaN
     let autoComplete = arg
     const leftPharentesis = autoComplete.match(/\(/g) ?? []
     const leftPharentesisCount = leftPharentesis.length
@@ -129,7 +129,7 @@ const bottomScreen = (arg) => {
     const screen2 = document.querySelector('.screen2')
     screen2.textContent === '0' ? screen2.textContent = null : null
     const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
-    
+    const [lastValue] = screen2.textContent.match(/[+-]?[\d∞]+\.?\d*$/) ?? ''
     if (toggleEraser) {
         toggle(arg)
         topScreen(`Ans = ${screen2.textContent}`)
@@ -239,12 +239,10 @@ const bottomScreen = (arg) => {
                 case !lastEntry:
                     screen2.textContent = '0.'
                     break
+                case lastValue.search(/[.]/) === 0:
+                    break
                 default:
-                    const lastValue = screen2.textContent.search(/\d+\.\d*$/)
-                    switch (true) {
-                        case lastValue === -1:
-                            screen2.textContent += arg 
-                    }
+                    screen2.textContent += arg 
                     break
             }
             break
@@ -273,6 +271,8 @@ const bottomScreen = (arg) => {
         default:
             switch (true) {
                 case lastEntry === '%'|| lastEntry === '∞':
+                    break
+                case lastValue === "0":
                     break
                 default:
                     screen2.textContent += arg

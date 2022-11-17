@@ -3,7 +3,7 @@ let toggleEraser = false
 
 const operateA = (arg) => {
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
-    const input = arg.match(/([-+]?)\d+\.?\d*/g)
+    const input = arg.match(/(?<value>[-+]?\d+\.?\d*)/g)
     if (!input) return Infinity
 
     const result = input.reduce((result, item)=> {
@@ -18,14 +18,13 @@ const operateMD = (arg) => {
         return arg
     }
     const result = arg
-        .replace(/(([-+]?)\d+\.?\d*)([÷x])(([-+]?)\d+\.?\d*)/, (item)=> {
-            console.log(item)
-            const match = arg.match(/(([-+]?)\d+\.?\d*)([÷x])(([-+]?)\d+\.?\d*)/)
-            if (match[3] === 'x') {
-                const result = Number(match[1]) * Number(match[4])
+        .replace(/(?<value1>[-+]?\d+\.?\d*)(?<operator>[÷x])(?<value2>[-+]?\d+\.?\d*)/g, (item)=> {
+            const match = item.match(/(?<value1>[-+]?\d+\.?\d*)(?<operator>[÷x])(?<value2>[-+]?\d+\.?\d*)/)
+            if (match.groups.operator === 'x') {
+                const result = Number(match.groups.value1) * Number(match.groups.value2)
                 return result.toLocaleString().replace(/\,/g,'')
-            } else if (match[3] === '÷') {
-                const result = Number(match[1]) / Number(match[4])
+            } else if (match.groups.operator === '÷') {
+                const result = Number(match.groups.value1) / Number(match.groups.value2)
                 return result.toLocaleString().replace(/\,/g,'')
             }
         })

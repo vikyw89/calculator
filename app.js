@@ -46,6 +46,7 @@ const operateP = (arg)=> {
 const operatePEMDA = (arg) => {
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
     let autoCompleteP = arg
+    console.log(autoCompleteP)
     const leftPharentesis = autoCompleteP.match(/\(/g) ?? []
     const leftPharentesisCount = leftPharentesis.length
     const rightPharentesis = autoCompleteP.match(/\)/g) ?? []

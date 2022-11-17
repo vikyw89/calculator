@@ -1,9 +1,9 @@
 let toggleEraser = false
-
-console.log((1e3).toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21}) )
+let trial = Infinity
+console.log(trial.toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21}) )
 const operateA = (arg) => {
     // Break Case, stop if there's infinity
-    const input = arg.match(/(?<value>[-+]?\d+\.?\d*)/g)
+    const input = arg.match(/(?<value>[-+]?[\d∞]+\.?[\d∞]*)/g)
     if ((arg.search(/∞/) === 0 ) || (!input)) return '∞'
 
     // Sum all of the value
@@ -22,8 +22,8 @@ const operateMD = (arg) => {
 
     // Solving 1 Multiplication or 1 Division operation recursively
     const result = arg
-        .replace(/(?<value1>[-+]?\d+\.?\d*)(?<operator>[÷x])(?<value2>[-+]?\d+\.?\d*)/, (item)=> {
-            const match = item.match(/(?<value1>[-+]?\d+\.?\d*)(?<operator>[÷x])(?<value2>[-+]?\d+\.?\d*)/)
+        .replace(/(?<value1>[-+]?[\d∞]+\.?[\d∞]*)(?<operator>[÷x])(?<value2>[-+]?[\d∞]+\.?[\d∞]*)/, (item)=> {
+            const match = item.match(/(?<value1>[-+]?[\d∞]+\.?[\d∞]*)(?<operator>[÷x])(?<value2>[-+]?[\d∞]+\.?[\d∞]*)/)
             let temp = 0
             switch (true) {
                 case match.groups.operator === 'x':
@@ -234,7 +234,7 @@ const bottomScreen = (arg) => {
         // dot
         case arg === '.':
             switch(true) {
-                case lastEntry === '.':
+                case lastEntry === '.' || lastEntry === '∞':
                     break
                 case !lastEntry:
                     screen2.textContent = '0.'
@@ -272,7 +272,7 @@ const bottomScreen = (arg) => {
         // Numbers
         default:
             switch (true) {
-                case lastEntry === '%'|| lastEntry === 'y':
+                case lastEntry === '%'|| lastEntry === '∞':
                     break
                 default:
                     screen2.textContent += arg

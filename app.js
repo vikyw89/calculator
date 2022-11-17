@@ -1,21 +1,21 @@
 let toggleEraser = false
 
-
+console.log((1e3).toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21}) )
 const operateA = (arg) => {
     // Break Case, stop if there's infinity
     const input = arg.match(/(?<value>[-+]?\d+\.?\d*)/g)
-    if ((arg.search(/Infinity/) === 0 ) || (!input)) return Infinity
+    if ((arg.search(/∞/) === 0 ) || (!input)) return '∞'
 
     // Sum all of the value
     const result = input.reduce((result, item)=> {
         return result += Number(item)
     },0)
-    return result
+    return result.toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
 }
 
 const operateMD = (arg) => {
     // Break Case, stop if there's infinity or no more MD operator left
-    if (arg.search(/Infinity/) === 0 ) return 'Infinity'
+    if (arg.search(/∞/) === 0 ) return '∞'
     if (arg.search(/[x÷]/) === -1){
         return arg
     }
@@ -28,18 +28,18 @@ const operateMD = (arg) => {
             switch (true) {
                 case match.groups.operator === 'x':
                     temp = Number(match.groups.value1) * Number(match.groups.value2)
-                    return temp
+                    return temp.toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
                 case match.groups.operator === '÷':
                     temp = Number(match.groups.value1) / Number(match.groups.value2)
-                    return temp
+                    return temp.toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
             }
         })
-    return operateMD(result)
+    return operateMD(result).toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
 }
 
 const operateP = (arg)=> {
     // Break Case, stop if there's infinity or no more pharentesis left
-    if (arg.search(/Infinity/) === 0 ) return 'Infinity'
+    if (arg.search(/∞/) === 0 ) return '∞'
     if (arg.search(/[()]/) === -1) {
         return arg
     }
@@ -47,14 +47,15 @@ const operateP = (arg)=> {
     // Solving 1 parenthesis recursively
     const result = arg.replace(/\([^()]*\)/, (item)=> {
         const match = item.replace(/[()]/, '')
-        return operateA(operateMD(match)).toLocaleString().replace(/\,/g,'')
+        return operateA(operateMD(match)).toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
     })
-    return operateP(result)
+    return operateP(result).toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
 }
 
 const operatePEMDA = (arg) => {
+    console.log(arg)
     // Break Case, stop if there's infinity
-    if (arg.search(/Infinity/) === 0 ) return 'Infinity'
+    if (arg.search(/∞/) === 0 ) return '∞'
 
     // Autocomplete user formula, adding pharanthesis where needed
     let autoComplete = arg
@@ -85,7 +86,7 @@ const operatePEMDA = (arg) => {
 
     // Solving equation, starting from Pharenthesis -> MD -> addition
     const result = operateA(operateMD(operateP(autoComplete)))
-    return result
+    return result.toLocaleString('fullwide', { useGrouping: false, maximumSignificantDigits:21})
 }
 
 const topScreen = (arg) => {
@@ -249,15 +250,8 @@ const bottomScreen = (arg) => {
             break
         // CE
         case arg === 'CE':
-            switch (true) {
-                case lastEntry === 'y':
-                    screen2.textContent = '0'
-                    break
-                default:
-                    screen2.textContent = screen2.textContent.match(/.*(?=.$)/)
-                    !screen2.textContent ? screen2.textContent = 0 : null
-                    break
-            }
+            screen2.textContent = screen2.textContent.match(/.*(?=.$)/)
+            !screen2.textContent ? screen2.textContent = 0 : null
             break
         // AC
         case arg === 'AC':

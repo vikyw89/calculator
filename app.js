@@ -1,6 +1,5 @@
 let toggleEraser = false
-let trial = (Infinity / Infinity) * 2
-console.log(Number(trial))
+
 const operateA = (arg) => {
     // Break Case
     const input = arg.match(/(?<value>[-+]?[\d∞]+\.?[\d∞]*)/g)

@@ -1,7 +1,6 @@
 let memory = 0
 let toggleEraser = false
 
-console.log((1e+26))
 const operateA = (arg) => {
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
     const input = arg.match(/([\-\+]?)\d+\.?\d*/g)
@@ -10,8 +9,7 @@ const operateA = (arg) => {
     const result = input.reduce((result, item)=> {
         return result += Number(item)
     },0)
-    console.table('operateA', arg, result)
-    return result
+    return result.toLocaleString().replace(/\,/g,'')
 }
 
 const operateMD = (arg) => {
@@ -24,13 +22,13 @@ const operateMD = (arg) => {
             const match = arg.match(/((\-|\+?)\d+\.?\d*)(÷|x)((\-|\+?)\d+\.?\d*)/)
             if (match[3] === 'x') {
                 const result = Number(match[1]) * Number(match[4])
-                return result
+                return result.toLocaleString().replace(/\,/g,'')
             } else if (match[3] === '÷') {
                 const result = Number(match[1]) / Number(match[4])
-                return result
+                return result.toLocaleString().replace(/\,/g,'')
             }
         })
-    return operateMD(result)
+    return operateMD(result).toLocaleString().replace(/\,/g,'')
 }
 
 const operateP = (arg)=> {
@@ -40,10 +38,9 @@ const operateP = (arg)=> {
     }
     const result = arg.replace(/\([^\(\)]*\)/g, (item)=> {
         const match = item.replace(/[\(\)]/, '')
-        return operateA(operateMD(match))
+        return operateA(operateMD(match)).toLocaleString().replace(/\,/g,'')
     })
-    console.table('operateP', arg, result)
-    return operateP(result)
+    return operateP(result).toLocaleString().replace(/\,/g,'')
 }
 
 const operatePEMDA = (arg) => {
@@ -73,7 +70,7 @@ const operatePEMDA = (arg) => {
         }
     })
     const result = operateA(operateMD(operateP(autoCompleteP)))
-    return result.toString()
+    return result
 }
 
 const topScreen = (arg) => {
@@ -121,9 +118,7 @@ const bottomScreen = (arg) => {
         toggle(arg)
         topScreen(`Ans = ${screen2.textContent}`)
     }
-    
     const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
-    console.log(lastEntry)
     switch (true) {
         // Pharenthesis
         case arg === '(':
@@ -141,7 +136,6 @@ const bottomScreen = (arg) => {
             break
         // Multiplier
         case arg === 'x':
-            console.log('x')
             switch (true){
                 default:
                     screen2.textContent += arg

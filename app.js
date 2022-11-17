@@ -1,66 +1,78 @@
-let memory = 0
 let toggleEraser = false
 
-const operateA = (arg) => {
-    if (arg.search(/Infinity/) === 0 ) return 'Infinity'
-    const input = arg.match(/([-+]?)\d+\.?\d*/g)
-    if (!input) return Infinity
 
+const operateA = (arg) => {
+    // Break Case, stop if there's infinity
+    const input = arg.match(/(?<value>[-+]?\d+\.?\d*)/g)
+    if ((arg.search(/Infinity/) === 0 ) || (!input)) return Infinity
+
+    // Sum all of the value
     const result = input.reduce((result, item)=> {
         return result += Number(item)
     },0)
-    return result.toLocaleString().replace(/\,/g,'')
+    return result
 }
 
 const operateMD = (arg) => {
+    // Break Case, stop if there's infinity or no more MD operator left
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
     if (arg.search(/[x÷]/) === -1){
         return arg
     }
+
+    // Solving 1 Multiplication or 1 Division operation recursively
     const result = arg
-        .replace(/(([-+]?)\d+\.?\d*)([÷x])(([-+]?)\d+\.?\d*)/, (item)=> {
-            console.log(item)
-            const match = arg.match(/(([-+]?)\d+\.?\d*)([÷x])(([-+]?)\d+\.?\d*)/)
-            if (match[3] === 'x') {
-                const result = Number(match[1]) * Number(match[4])
-                return result.toLocaleString().replace(/\,/g,'')
-            } else if (match[3] === '÷') {
-                const result = Number(match[1]) / Number(match[4])
-                return result.toLocaleString().replace(/\,/g,'')
+        .replace(/(?<value1>[-+]?\d+\.?\d*)(?<operator>[÷x])(?<value2>[-+]?\d+\.?\d*)/, (item)=> {
+            const match = item.match(/(?<value1>[-+]?\d+\.?\d*)(?<operator>[÷x])(?<value2>[-+]?\d+\.?\d*)/)
+            let temp = 0
+            switch (true) {
+                case match.groups.operator === 'x':
+                    temp = Number(match.groups.value1) * Number(match.groups.value2)
+                    return temp
+                case match.groups.operator === '÷':
+                    temp = Number(match.groups.value1) / Number(match.groups.value2)
+                    return temp
             }
         })
-    return operateMD(result).toLocaleString().replace(/\,/g,'')
+    return operateMD(result)
 }
 
 const operateP = (arg)=> {
+    // Break Case, stop if there's infinity or no more pharentesis left
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
-    if (arg.search(/[)(]/) === -1) {
+    if (arg.search(/[()]/) === -1) {
         return arg
     }
-    const result = arg.replace(/\([^()]*\)/g, (item)=> {
+
+    // Solving 1 parenthesis recursively
+    const result = arg.replace(/\([^()]*\)/, (item)=> {
         const match = item.replace(/[()]/, '')
         return operateA(operateMD(match)).toLocaleString().replace(/\,/g,'')
     })
-    return operateP(result).toLocaleString().replace(/\,/g,'')
+    return operateP(result)
 }
 
 const operatePEMDA = (arg) => {
+    // Break Case, stop if there's infinity
     if (arg.search(/Infinity/) === 0 ) return 'Infinity'
-    let autoCompleteP = arg
-    const leftPharentesis = autoCompleteP.match(/\(/g) ?? []
+
+    // Autocomplete user formula, adding pharanthesis where needed
+    let autoComplete = arg
+    const leftPharentesis = autoComplete.match(/\(/g) ?? []
     const leftPharentesisCount = leftPharentesis.length
-    const rightPharentesis = autoCompleteP.match(/\)/g) ?? []
+    const rightPharentesis = autoComplete.match(/\)/g) ?? []
     const rightPharentesisCount = rightPharentesis.length
     const difference = leftPharentesisCount - rightPharentesisCount
     switch (true){
         case difference !== 0:
             for (let i = 0; i < difference; i++) {
-                autoCompleteP += ')'
+                autoComplete += ')'
             }
             break
     }
     
-    autoCompleteP = autoCompleteP.replace(/((?<=[^-+x÷])\()|(\)(?=[^-+x÷\()])|(%))/g, (item)=> {
+    // Autocomplete user formula, adding x and translating % where needed
+    autoComplete = autoComplete.replace(/((?<=[^-+x÷])\()|(\)(?=[^-+x÷\()])|(%))/g, (item)=> {
         switch (true){
             case item === '(':
                 return 'x('
@@ -70,7 +82,9 @@ const operatePEMDA = (arg) => {
                 return 'x1÷100'
         }
     })
-    const result = operateA(operateMD(operateP(autoCompleteP)))
+
+    // Solving equation, starting from Pharenthesis -> MD -> addition
+    const result = operateA(operateMD(operateP(autoComplete)))
     return result
 }
 
@@ -95,32 +109,35 @@ const toggle = (arg) => {
 }
 
 const historyClickHandler = (e) => {
-    const result = e.target.textContent.match(/(.*\=)\s(.*)/)
-    topScreen(result[1])
+    const result = e.target.textContent.match(/(?<equation>.*\=)\s(?<result>.*)/)
+    topScreen(result.groups.equation)
     const screen2 = document.querySelector('.screen2')
-    screen2.textContent = result[2]
+    screen2.textContent = result.groups.result
 }
 
 const history = (arg) => {
     const parent = document.querySelector('.history-container')
     const newHistory = document.createElement('div')
+
     newHistory.addEventListener('click', historyClickHandler)
     newHistory.textContent = arg
     parent.insertAdjacentElement('afterbegin', newHistory)
 }
 
-
 const bottomScreen = (arg) => {
     const screen2 = document.querySelector('.screen2')
-    screen2.textContent === '0' ? screen2.textContent = '' : null
-    if (toggleEraser === true) {
+    screen2.textContent === '0' ? screen2.textContent = null : null
+    const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
+    
+    if (toggleEraser) {
         toggle(arg)
         topScreen(`Ans = ${screen2.textContent}`)
     }
-    const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
+    
     switch (true) {
         // Pharenthesis
         case arg === '(':
+            console.log(lastEntry)
             screen2.textContent += arg
             break
         case arg === ')':
@@ -174,14 +191,14 @@ const bottomScreen = (arg) => {
             }
             break
         case arg === '%':
+            console.log(lastEntry)
             switch (true) {
-                default:
-                    screen2.textContent += arg
-                    break
-                case lastEntry === '÷' || lastEntry === 'x' || lastEntry === '(' || lastEntry === '%':
+                case lastEntry === '÷' || lastEntry === 'x':
                     break
                 case !lastEntry:
-                    screen2.textContent += 0
+                    screen2.textContent += '0%'
+                    break
+                default:
                     screen2.textContent += arg
                     break
             }
@@ -248,11 +265,15 @@ const bottomScreen = (arg) => {
             break
         // Equal
         case arg === '=':
-            const result = operatePEMDA(screen2.textContent)
-            history(`${screen2.textContent} = ${result}`)
-            topScreen(`${screen2.textContent} =`)
-            screen2.textContent = result
-            toggle(arg)
+            switch (true) {
+                case lastEntry.search(/[\d.)%]/) === 0:
+                    const result = operatePEMDA(screen2.textContent)
+                    history(`${screen2.textContent} = ${result}`)
+                    topScreen(`${screen2.textContent} =`)
+                    screen2.textContent = result
+                    toggle(arg)
+                    break
+            }
             break
         // Numbers
         default:

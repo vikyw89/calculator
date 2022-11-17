@@ -1,8 +1,9 @@
 let memory = 0
 let toggleEraser = false
 
-
+console.log((1e+26))
 const operateA = (arg) => {
+    if (arg.search(/Infinity/) === 0 ) return 'Infinity'
     const input = arg.match(/([\-\+]?)\d+\.?\d*/g)
     if (!input) return Infinity
 
@@ -14,6 +15,7 @@ const operateA = (arg) => {
 }
 
 const operateMD = (arg) => {
+    if (arg.search(/Infinity/) === 0 ) return 'Infinity'
     if (arg.search(/[x÷]/) === -1){
         return arg
     }
@@ -32,6 +34,7 @@ const operateMD = (arg) => {
 }
 
 const operateP = (arg)=> {
+    if (arg.search(/Infinity/) === 0 ) return 'Infinity'
     if (arg.search(/[\)\()]/) === -1) {
         return arg
     }
@@ -70,12 +73,7 @@ const operatePEMDA = (arg) => {
         }
     })
     const result = operateA(operateMD(operateP(autoCompleteP)))
-
-    history(`${autoCompleteP} = ${result}`)
-    topScreen(`${autoCompleteP} =`)
-    
-    console.table('operatePEMDA', autoCompleteP, result)
-    return result
+    return result.toString()
 }
 
 const topScreen = (arg) => {
@@ -102,7 +100,7 @@ const historyClickHandler = (e) => {
     console.log(e.target.textContent)
     const result = e.target.textContent.match(/(.*\=)\s(.*)/)
     console.log(result)
-    screen1(result[1])
+    topScreen(result[1])
     const screen2 = document.querySelector('.screen2')
     screen2.textContent = result[2]
 }
@@ -258,6 +256,8 @@ const bottomScreen = (arg) => {
         // Equal
         case arg === '=':
             const result = operatePEMDA(screen2.textContent)
+            history(`${screen2.textContent} = ${result}`)
+            topScreen(`${screen2.textContent} =`)
             screen2.textContent = result
             toggle(arg)
             break

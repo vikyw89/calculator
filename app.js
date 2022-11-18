@@ -82,11 +82,11 @@ const operatePEMDA = (arg) => {
     })
 
     // Solving equation, starting from Pharenthesis -> MD -> addition
-    const result = operateA(operateMD(operateP(autoComplete)))
+    const result = +(operateA(operateMD(operateP(autoComplete))))
     console.log('PEMDA', result)
-    return Number.isSafeInteger(result)
-        ? result
-        : +(result.toLocaleString("en-US", { useGrouping: false, maximumFractionDigits: 10 , maximumSignificantDigits: 10}).replace(/∞/g, Infinity))
+    return ((result < Number.MAX_VALUE) && (result > Number.MIN_VALUE))
+        ? (result.toLocaleString("en-US", { useGrouping: false, maximumFractionDigits: 10 , maximumSignificantDigits: 10}).replace(/∞/g, Infinity))
+        : 'ERROR'
 }
 
 const topScreen = (arg) => {
@@ -129,7 +129,7 @@ const bottomScreen = (arg) => {
     screen2.textContent === '0' ? screen2.textContent = null : null
     const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
     const [lastValue] = screen2.textContent.match(/[-+]?([\d]+\.?[\d]*|Infinity)+$/) ?? ''
-
+    lastEntry === 'R' ? screen2.textContent = '0' : null
     if (toggleEraser) {
         toggle(arg)
         topScreen(`Ans = ${screen2.textContent}`)

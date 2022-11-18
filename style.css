@@ -88,14 +88,13 @@ footer {
 
 .history-container div:hover {
     border:#8ab4f8 2px solid;
-
 }
 
 .screen {
     grid-area: 1 / 1 / 2 / 5;
     height:100px;
     border-radius: 8px;
-    border: 1px solid #3c4043;
+    border: #3c4043 1px solid;
     display:grid;
     grid-template-rows: repeat(2, 1fr);
     align-items: center;

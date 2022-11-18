@@ -151,11 +151,15 @@ button {
     border: #8ab4f8 1px solid;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
-button:hover {
+
+button:active {
     border: #8ab4f8 1px solid;
+    background-color: #3c404300;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
+
 .pressed {
     border: #8ab4f8 1px solid;
+    background-color: #3c404300;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }

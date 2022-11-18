@@ -87,12 +87,12 @@ const operatePEMDA = (arg) => {
     console.log('PEMDA', result)
     switch (true) {
         case result < Number.MIN_SAFE_INTEGER:
-            return Error
+            return 'Error'
         case result > Number.MAX_SAFE_INTEGER:
-            return Infinity
+            return 'Infinity'
         default:
             // return result
-            return result.toLocaleString("fullwide", { useGrouping: false, maximumSignificantDigits: 15}).replace(/∞/g, Infinity)
+            return result.toLocaleString("fullwide", { useGrouping: false, maximumFractionDigits:10}).replace(/∞/g, Infinity)
     }
 }
 
@@ -136,7 +136,7 @@ const bottomScreen = (arg) => {
     screen2.textContent === '0' ? screen2.textContent = null : null
     const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
     const [lastValue] = screen2.textContent.match(/[-+]?([\d]+\.?[\d]*|Infinity)+$/) ?? ''
-    lastEntry === 'R' ? screen2.textContent = '0' : null
+    lastEntry === 'R' || lastEntry === 'y' ? screen2.textContent = '0' : null
     if (toggleEraser) {
         toggle(arg)
         topScreen(`Ans = ${screen2.textContent}`)

@@ -133,10 +133,11 @@ const history = (arg) => {
 
 const bottomScreen = (arg) => {
     const screen2 = document.querySelector('.screen2')
+    lastEntry === 'R' || lastEntry === 'y' ? screen2.textContent = '0' : null
     screen2.textContent === '0' ? screen2.textContent = null : null
     const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
     const [lastValue] = screen2.textContent.match(/[-+]?([\d]+\.?[\d]*|Infinity)+$/) ?? ''
-    lastEntry === 'R' || lastEntry === 'y' ? screen2.textContent = '0' : null
+
     if (toggleEraser) {
         toggle(arg)
         topScreen(`Ans = ${screen2.textContent}`)

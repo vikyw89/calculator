@@ -19,8 +19,7 @@ const operateMD = (arg) => {
     // Break Case, no more MD operator left
     if (arg.search(/[x÷]/) === -1){
         console.log('MD',arg)
-        return arg
-        
+        return arg 
     }
 
     // Solving 1 Multiplication or 1 Division operation recursively
@@ -28,16 +27,19 @@ const operateMD = (arg) => {
         .replace(/(?<value1>(?<valueL>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueL>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityL>[-+]?Infinity))(?<operator>[÷x])(?<value2>(?<valueR>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueR>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityR>[-+]?Infinity))/, (item)=> {
             const match = item.match(/(?<value1>(?<valueL>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueL>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityL>[-+]?Infinity))(?<operator>[÷x])(?<value2>(?<valueR>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueR>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityR>[-+]?Infinity))/)
             let temp = 0
-            console.log('MDresult', match)
+            console.log('MDresult', item)
             switch (true) {
                 case match.groups.operator === 'x':
                     temp = (+match.groups.value1 * +match.groups.value2 )
-                    return temp
+                    console.log('temp',temp)
+                    return temp > 0 ? `+${temp}` : `-${temp}`
                 case match.groups.operator === '÷':
                     temp = (+match.groups.value1 / +match.groups.value2 )
-                    return temp
+                    console.log('temp2',temp)
+                    return temp > 0 ? `+${temp}` : `-${temp}`
             }
         })
+    console.log('MDr1', result)
     return operateMD(result)
 }
 

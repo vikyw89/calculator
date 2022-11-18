@@ -297,7 +297,7 @@ const screenHandler = (arg) => {
 
 const addClass = (arg) => {
     const button = document.querySelector(`button[data-key='${arg}']`)
-    const screen = document.querySelector('#screen')
+    const screen = document.querySelector('.screen')
     screen.classList.add('pressed')
     button ? button.classList.add('pressed') : null
 }

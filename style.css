@@ -11,7 +11,10 @@
     outline: #8ab4f8 1px solid;
     outline-offset: -1px;
     */
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    transition: 0.5s;
+    text-shadow: -1px -3px 16px rgba(24,49,192,0.35);
 }
 
 html {
@@ -52,6 +55,7 @@ footer {
     justify-content: space-between;
     padding: 20px;
     gap:10px;
+    box-shadow: none;
 }
 
 .history-container {
@@ -66,6 +70,7 @@ footer {
     text-overflow: clip;
     overflow: hidden;
     text-overflow: ellipsis;
+    box-shadow: none;
 }
 
 .history-container div {
@@ -97,6 +102,8 @@ footer {
     justify-content: flex-end;
     padding: 10px;
     text-align: end;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    transition: 0.3s;
 }
 
 .screen1 {
@@ -104,6 +111,8 @@ footer {
     text-overflow: clip;
     overflow: hidden;
     text-overflow: ellipsis;
+    box-shadow: none;
+    transition: 0.3s;
 }
 
 .screen2 {
@@ -112,6 +121,9 @@ footer {
     overflow: hidden;
     text-align: end;
     text-overflow: ellipsis;
+    box-shadow: none;
+    transition: 0.3s;
+    text-shadow: -1px -3px 16px rgba(24,49,192,0.35);
 }
 
 .light {
@@ -134,8 +146,14 @@ button {
     border-radius: 4px;
     transition:0.3s;
 }
+
+.screen:hover {
+    border: #8ab4f8 1px solid;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
 button:hover {
     border: #8ab4f8 1px solid;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 .pressed {
     border: #8ab4f8 1px solid;

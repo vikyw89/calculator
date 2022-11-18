@@ -313,12 +313,10 @@ const removeClass = (arg) => {
 
 const mousedownHandler = (e) => {
     screenHandler(e.target.dataset.key)
-    e.preventDefault()
 }
 
 const mouseupHandler = (e) => {
     removeClass(e.target.dataset.key)
-    e.preventDefault()
 }
 
 const keyboardTranslate = (arg)=> {
@@ -352,8 +350,6 @@ window.addEventListener('keydown', keydownHandler)
 window.addEventListener('keyup', keyupHandler)
 
 document.querySelectorAll('button').forEach(item => {
-    item.addEventListener('touchstart', mousedownHandler)
-    item.addEventListener('touchend', mouseupHandler)
-    item.addEventListener('mousedown', mousedownHandler)
-    item.addEventListener('mouseup', mouseupHandler)
+    item.addEventListener('pointerdown', mousedownHandler)
+    item.addEventListener('pointerup', mouseupHandler)
 })

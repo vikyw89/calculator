@@ -88,7 +88,9 @@ const operatePEMDA = (arg) => {
     // Solving equation, starting from Pharenthesis -> MD -> addition
     const result = operateA(operateMD(operateP(autoComplete)))
     console.log('PEMDA', result)
-    return +(result.toLocaleString("en-US", { useGrouping: false, maximumFractionDigits: 10 }).replace(/∞/g, Infinity))
+    return Number.isSafeInteger(result)
+        ? result
+        : +(result.toLocaleString("en-US", { useGrouping: false, maximumFractionDigits: 10 , maximumSignificantDigits: 10}).replace(/∞/g, Infinity))
 }
 
 const topScreen = (arg) => {

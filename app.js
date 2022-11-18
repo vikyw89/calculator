@@ -31,15 +31,12 @@ const operateMD = (arg) => {
             switch (true) {
                 case match.groups.operator === 'x':
                     temp = (+match.groups.value1 * +match.groups.value2 )
-                    console.log('temp',temp)
                     return temp > 0 ? `+${temp}` : `-${temp}`
                 case match.groups.operator === '÷':
                     temp = (+match.groups.value1 / +match.groups.value2 )
-                    console.log('temp2',temp)
                     return temp > 0 ? `+${temp}` : `-${temp}`
             }
         })
-    console.log('MDr1', result)
     return operateMD(result)
 }
 
@@ -125,7 +122,6 @@ const historyClickHandler = (e) => {
 const history = (arg) => {
     const parent = document.querySelector('.history-container')
     const newHistory = document.createElement('div')
-
     newHistory.addEventListener('click', historyClickHandler)
     newHistory.textContent = arg
     parent.insertAdjacentElement('afterbegin', newHistory)
@@ -157,7 +153,6 @@ const bottomScreen = (arg) => {
                     screen2.textContent += arg
                     break
             }
-            !screen2.textContent ? screen2.textContent = 0 : null
             break
         // Multiplier
         case arg === 'x':
@@ -190,8 +185,7 @@ const bottomScreen = (arg) => {
                     screen2.textContent += arg
                     break
                 case !lastEntry:
-                    screen2.textContent += '0'
-                    screen2.textContent += arg
+                    screen2.textContent += `0${arg}`
                     break
             }
             break
@@ -200,7 +194,7 @@ const bottomScreen = (arg) => {
                 case lastEntry === '÷' || lastEntry === 'x' || lastEntry === '(':
                     break
                 case !lastEntry:
-                    screen2.textContent += '0%'
+                    screen2.textContent += `0${arg}`
                     break
                 default:
                     screen2.textContent += arg
@@ -216,8 +210,7 @@ const bottomScreen = (arg) => {
                 case lastEntry === '-':
                     break
                 case lastEntry === '+':
-                    screen2.textContent = screen2.textContent.match(/.*(?=.$)/)
-                    screen2.textContent += arg
+                    screen2.textContent = `${screen2.textContent.match(/.*(?=.$)/)}${arg}`
                     break
             }
             break
@@ -229,8 +222,7 @@ const bottomScreen = (arg) => {
                 case lastEntry === '+':
                     break
                 case lastEntry === '-':
-                    screen2.textContent = screen2.textContent.match(/.*(?=.$)/)
-                    screen2.textContent += arg
+                    screen2.textContent = `${screen2.textContent.match(/.*(?=.$)/)}${arg}`
                     break
             }
             break
@@ -241,7 +233,7 @@ const bottomScreen = (arg) => {
                 case lastEntry === '.' || lastEntry === '-'|| lastEntry === '+':
                     break
                 case !lastEntry:
-                    screen2.textContent = '0.'
+                    screen2.textContent = `0${arg}`
                     break
                 case (/[.]/).test(lastValue):
                     break
@@ -261,7 +253,6 @@ const bottomScreen = (arg) => {
                     screen2.textContent = screen2.textContent.match(/.*(?=.$)/)
                     break
             }
-            !screen2.textContent ? screen2.textContent = 0 : null
             break
         // AC
         case arg === 'AC':
@@ -278,7 +269,6 @@ const bottomScreen = (arg) => {
                     toggle(arg)
                     break
             }
-            !screen2.textContent ? screen2.textContent = 0 : null
             break
         // Numbers
         default:
@@ -291,6 +281,7 @@ const bottomScreen = (arg) => {
                     screen2.textContent += arg
                     break
             }
+        !screen2.textContent ? screen2.textContent = 0 : null
     }
 }
 

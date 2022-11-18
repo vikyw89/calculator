@@ -131,7 +131,7 @@ const bottomScreen = (arg) => {
     const screen2 = document.querySelector('.screen2')
     screen2.textContent === '0' ? screen2.textContent = null : null
     const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
-    const [lastValue] = screen2.textContent.match(/[^()x÷]+$/) ?? ''
+    const [lastValue] = screen2.textContent.match(/[-+]?([\d]+\.?[\d]*|Infinity)+$/) ?? ''
 
     if (toggleEraser) {
         toggle(arg)
@@ -232,8 +232,9 @@ const bottomScreen = (arg) => {
             break
         // dot
         case arg === '.':
+            console.log('lastValue', lastValue)
             switch(true) {
-                case lastEntry === '.' || lastEntry === '∞':
+                case lastEntry === '.' || lastEntry === '-'|| lastEntry === '+':
                     break
                 case !lastEntry:
                     screen2.textContent = '0.'

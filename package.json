@@ -1,0 +1,23 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "A calculator project for TOP",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vikyw89/calculator.git"
+  },
+  "author": "vikyw89",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vikyw89/calculator/issues"
+  },
+  "homepage": "https://github.com/vikyw89/calculator#readme",
+  "devDependencies": {
+    "eslint": "^8.27.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}

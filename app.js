@@ -84,9 +84,14 @@ const operatePEMDA = (arg) => {
     // Solving equation, starting from Pharenthesis -> MD -> addition
     const result = +(operateA(operateMD(operateP(autoComplete))))
     console.log('PEMDA', result)
-    return ((result < Number.MAX_VALUE) && (result > Number.MIN_VALUE))
-        ? (result.toLocaleString("en-US", { useGrouping: false, maximumFractionDigits: 10 , maximumSignificantDigits: 10}).replace(/∞/g, Infinity))
-        : 'ERROR'
+    switch (true) {
+        case result < Number.MIN_VALUE:
+            return Error
+        case result > Number.MAX_VALUE:
+            return Infinity
+        default:
+            return result.toLocaleString("en-US", { useGrouping: false, maximumFractionDigits: 10 , maximumSignificantDigits: 10}).replace(/∞/g, Infinity)
+    }
 }
 
 const topScreen = (arg) => {
@@ -297,7 +302,6 @@ const removeClass = (arg) => {
     const screen = document.querySelector('#screen')
     screen.classList.remove('pressed')
     button ? button.classList.remove('pressed') : null
-    
 }
 
 const mousedownHandler = (e) => {
@@ -308,32 +312,31 @@ const mouseupHandler = (e) => {
     removeClass(e.target.dataset.key)
 }
 
-const keydownHandler = (e) => {
-    const arg = e.key
+const keyboardTranslate = (arg)=> {
     switch (true){
         case arg === 'Backspace':
-            screenHandler('CE')
-            break
-        case arg.search(/[0-9\-\=\+\%\.\(\)]/) === 0:
-            screenHandler(arg)
-            break
+            return 'CE'
+        case arg.search(/[0-9\-\=\+\%\.\(\)x]/) === 0:
+            return arg
         case arg === 'Escape':
-            screenHandler('AC')
-            break
+            return 'AC'
         case arg === '/':
-            screenHandler('÷')
-            break
+            return '÷'
         case arg === '*':
-            screenHandler('x')
-            break
+            return 'x'
         case arg === 'Enter':
-            screenHandler('=')
-            break
+            return '='
+        default:
+            return ''
     }
 }
 
+const keydownHandler = (e) => {
+    screenHandler(keyboardTranslate(e.key))
+}
+
 const keyupHandler = (e) => {
-    removeClass(e.key)
+    removeClass(keyboardTranslate(e.key))
 }
 
 window.addEventListener('keydown', keydownHandler)

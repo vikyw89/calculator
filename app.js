@@ -3,9 +3,10 @@ let toggleEraser = false
 
 const operateA = (arg) => {
     // Break Case
+    console.log('inputA',arg)
     const input = arg
         .match(/(?<value>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValue>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinity>[-+]?Infinity)/g)
-    // Sum all of the value
+        // Sum all of the value
     const result = input.reduce((result, item)=> {
         return result += +item
     },0)
@@ -85,12 +86,13 @@ const operatePEMDA = (arg) => {
     const result = +(operateA(operateMD(operateP(autoComplete))))
     console.log('PEMDA', result)
     switch (true) {
-        case result < Number.MIN_VALUE:
+        case result < Number.MIN_SAFE_INTEGER:
             return Error
-        case result > Number.MAX_VALUE:
+        case result > Number.MAX_SAFE_INTEGER:
             return Infinity
         default:
-            return result.toLocaleString("en-US", { useGrouping: false, maximumFractionDigits: 10 , maximumSignificantDigits: 10}).replace(/∞/g, Infinity)
+            // return result
+            return result.toLocaleString("fullwide", { useGrouping: false, maximumSignificantDigits: 15}).replace(/∞/g, Infinity)
     }
 }
 

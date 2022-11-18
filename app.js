@@ -295,9 +295,9 @@ const addClass = (arg) => {
 const removeClass = (arg) => {
     const button = document.querySelector(`button[data-key='${arg}']`)
     const screen = document.querySelector('#screen')
-    screen.classList.add('pressed')
+    screen.classList.remove('pressed')
     button ? button.classList.remove('pressed') : null
-    screen ? screen.classList.remove('pressed') : null
+    
 }
 
 const mousedownHandler = (e) => {

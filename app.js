@@ -12,7 +12,7 @@ const operateA = (arg) => {
         return result += +item
     },0)
     console.log('A',+result)
-    return result.toLocaleString('fullwide', { useGrouping: false}).replace('∞', Infinity)
+    return result
 }
 
 const operateMD = (arg) => {
@@ -20,6 +20,7 @@ const operateMD = (arg) => {
     if (arg.search(/[x÷]/) === -1){
         console.log('MD',arg)
         return arg
+        
     }
 
     // Solving 1 Multiplication or 1 Division operation recursively
@@ -37,7 +38,6 @@ const operateMD = (arg) => {
                     return temp
             }
         })
-    console.log('MDresult2',result)
     return operateMD(result)
 }
 
@@ -88,7 +88,7 @@ const operatePEMDA = (arg) => {
     // Solving equation, starting from Pharenthesis -> MD -> addition
     const result = operateA(operateMD(operateP(autoComplete)))
     console.log('PEMDA', result)
-    return Number(result)
+    return +result.toFixed(10).replace(/0*$/g, '')
 }
 
 const topScreen = (arg) => {
@@ -132,6 +132,7 @@ const bottomScreen = (arg) => {
     screen2.textContent === '0' ? screen2.textContent = null : null
     const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
     const [lastValue] = screen2.textContent.match(/[^()x÷]+$/) ?? ''
+
     if (toggleEraser) {
         toggle(arg)
         topScreen(`Ans = ${screen2.textContent}`)
@@ -148,7 +149,7 @@ const bottomScreen = (arg) => {
             const rightPharentesis = screen2.textContent.match(/\)/g) ?? []
             const rightPharentesisCount = rightPharentesis.length
             switch (true){
-                case leftPharentesisCount > rightPharentesisCount:
+                case (leftPharentesisCount > rightPharentesisCount) && (/[\d%.]/).test(lastEntry):
                     screen2.textContent += arg
                     break
             }
@@ -191,9 +192,8 @@ const bottomScreen = (arg) => {
             }
             break
         case arg === '%':
-            console.log(lastEntry)
             switch (true) {
-                case lastEntry === '÷' || lastEntry === 'x':
+                case lastEntry === '÷' || lastEntry === 'x' || lastEntry === '(':
                     break
                 case !lastEntry:
                     screen2.textContent += '0%'

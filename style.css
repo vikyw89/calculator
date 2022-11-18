@@ -151,12 +151,6 @@ button {
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 
-button:active {
-    border: #8ab4f8 1px solid;
-    background-color: #3c404300;
-    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
-}
-
 .pressed {
     border: #8ab4f8 1px solid;
     background-color: #3c404300;

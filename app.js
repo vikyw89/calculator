@@ -1,6 +1,6 @@
 let toggleEraser = false
 
-
+console.log('aaa')
 const operateA = (arg) => {
     // Break Case
     console.log('inputA',arg)
@@ -134,10 +134,10 @@ const history = (arg) => {
 const bottomScreen = (arg) => {
     const screen2 = document.querySelector('.screen2')
     const [lastEntry] = screen2.textContent.match(/.$/) ?? ''
-    const [lastValue] = screen2.textContent.match(/[-+]?([\d]+\.?[\d]*|Infinity)+$/) ?? ''
     lastEntry === 'R' || lastEntry === 'y' ? screen2.textContent = '0' : null
+    
     screen2.textContent === '0' ? screen2.textContent = null : null
-
+    const [lastValue] = screen2.textContent.match(/[-+]?([\d]+\.?[\d]*|Infinity)+$/) ?? ''
     if (toggleEraser) {
         toggle(arg)
         topScreen(`Ans = ${screen2.textContent}`)
@@ -275,17 +275,20 @@ const bottomScreen = (arg) => {
             break
         // Numbers
         default:
+            console.log('test', arg)
             switch (true) {
                 case lastEntry === '%':
                     break
                 case lastValue === "0":
                     break
                 default:
+                    console.log('test2')
                     screen2.textContent += arg
                     break
             }
-        !screen2.textContent ? screen2.textContent = 0 : null
+            break
     }
+    !screen2.textContent ? screen2.textContent = 0 : null
 }
 
 const screenHandler = (arg) => {

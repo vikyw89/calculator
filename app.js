@@ -24,7 +24,8 @@ const operateMD = (arg) => {
   // Solving 1 Multiplication or 1 Division operation recursively
   const result = arg
       .replace(/(?<value1>(?<valueL>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueL>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityL>[-+]?Infinity))(?<operator>[÷x])(?<value2>(?<valueR>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueR>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityR>[-+]?Infinity))/, (item)=> {
-        const match = item.match(/(?<value1>(?<valueL>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueL>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityL>[-+]?Infinity))(?<operator>[÷x])(?<value2>(?<valueR>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueR>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityR>[-+]?Infinity))/);
+        const match = item
+            .match(/(?<value1>(?<valueL>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueL>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityL>[-+]?Infinity))(?<operator>[÷x])(?<value2>(?<valueR>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueR>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityR>[-+]?Infinity))/);
         let temp = 0;
         switch (true) {
           case match.groups.operator === 'x':
@@ -71,16 +72,17 @@ const operatePEMDA = (arg) => {
   }
 
   // Autocomplete user formula, adding x and translating % where needed
-  autoComplete = autoComplete.replace(/(?<closingParenthesis>(?<=[^-+x÷])\()|(?<openingParenthesis>\)(?=[^-+x÷\()]))|(?<percent>%)/g, (item)=> {
-    switch (true) {
-      case item === '(':
-        return 'x(';
-      case item === ')':
-        return ')x';
-      case item === '%':
-        return 'x1÷100';
-    }
-  });
+  autoComplete = autoComplete
+      .replace(/(?<closingParenthesis>(?<=[^-+x÷])\()|(?<openingParenthesis>\)(?=[^-+x÷\()]))|(?<percent>%)/g, (item)=> {
+        switch (true) {
+          case item === '(':
+            return 'x(';
+          case item === ')':
+            return ')x';
+          case item === '%':
+            return 'x1÷100';
+        }
+      });
 
   // Solving equation, starting from Pharenthesis -> MD -> addition
   const result = +(operateA(operateMD(operateP(autoComplete))));
@@ -92,7 +94,9 @@ const operatePEMDA = (arg) => {
       return 'Infinity';
     default:
       // return result
-      return result.toLocaleString('fullwide', {useGrouping: false, maximumFractionDigits: 10}).replace(/∞/g, Infinity);
+      return result
+          .toLocaleString('fullwide', {useGrouping: false, maximumFractionDigits: 10})
+          .replace(/∞/g, Infinity);
   }
 };
 
@@ -135,8 +139,10 @@ const bottomScreen = (arg) => {
   const screen2 = document.querySelector('.screen2');
     screen2.textContent === '0' ? screen2.textContent = null : null;
 
-    const [lastEntry] = screen2.textContent.match(/.$/) ?? '';
-    const [lastValue] = screen2.textContent.match(/[-+]?([\d]+\.?[\d]*|Infinity)+$/) ?? '';
+    const [lastEntry] = screen2.textContent
+        .match(/.$/) ?? '';
+    const [lastValue] = screen2.textContent
+        .match(/[-+]?([\d]+\.?[\d]*|Infinity)+$/) ?? '';
     lastEntry === 'R' || lastEntry === 'y' ? screen2.textContent = '0' : null;
 
     if (toggleEraser) {
@@ -155,7 +161,8 @@ const bottomScreen = (arg) => {
         const rightPharentesis = screen2.textContent.match(/\)/g) ?? [];
         const rightPharentesisCount = rightPharentesis.length;
         switch (true) {
-          case (leftPharentesisCount > rightPharentesisCount) && (/[\d%.]/).test(lastEntry):
+          case (leftPharentesisCount > rightPharentesisCount) && (/[\d%.]/)
+              .test(lastEntry):
             screen2.textContent += arg;
             break;
         }
@@ -216,7 +223,8 @@ const bottomScreen = (arg) => {
           case lastEntry === '-':
             break;
           case lastEntry === '+':
-            screen2.textContent = `${screen2.textContent.match(/.*(?=.$)/)}${arg}`;
+            screen2.textContent = `${screen2.textContent
+                .match(/.*(?=.$)/)}${arg}`;
             break;
         }
         break;
@@ -228,7 +236,8 @@ const bottomScreen = (arg) => {
           case lastEntry === '+':
             break;
           case lastEntry === '-':
-            screen2.textContent = `${screen2.textContent.match(/.*(?=.$)/)}${arg}`;
+            screen2.textContent = `${screen2.textContent
+                .match(/.*(?=.$)/)}${arg}`;
             break;
         }
         break;

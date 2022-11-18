@@ -5,8 +5,6 @@ const operateA = (arg) => {
     // Break Case
     const input = arg
         .match(/(?<value>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValue>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinity>[-+]?Infinity)/g)
-    if (!input) return Infinity
-    console.log(input)
     // Sum all of the value
     const result = input.reduce((result, item)=> {
         return result += +item
@@ -27,7 +25,6 @@ const operateMD = (arg) => {
         .replace(/(?<value1>(?<valueL>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueL>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityL>[-+]?Infinity))(?<operator>[÷x])(?<value2>(?<valueR>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueR>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityR>[-+]?Infinity))/, (item)=> {
             const match = item.match(/(?<value1>(?<valueL>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueL>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityL>[-+]?Infinity))(?<operator>[÷x])(?<value2>(?<valueR>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValueR>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinityR>[-+]?Infinity))/)
             let temp = 0
-            console.log('MDresult', item)
             switch (true) {
                 case match.groups.operator === 'x':
                     temp = (+match.groups.value1 * +match.groups.value2 )
@@ -228,7 +225,6 @@ const bottomScreen = (arg) => {
             break
         // dot
         case arg === '.':
-            console.log('lastValue', lastValue)
             switch(true) {
                 case lastEntry === '.' || lastEntry === '-'|| lastEntry === '+':
                     break
@@ -244,7 +240,6 @@ const bottomScreen = (arg) => {
             break
         // CE
         case arg === 'CE':
-            console.log(lastValue, lastEntry)
             switch (true) {
                 case lastEntry === 'y':
                     screen2.textContent = screen2.textContent.replace('Infinity','')

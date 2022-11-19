@@ -160,7 +160,6 @@ const bottomScreen = (arg) => {
         const leftPharentesisCount = leftPharentesis.length;
         const rightPharentesis = screen2.textContent.match(/\)/g) ?? [];
         const rightPharentesisCount = rightPharentesis.length;
-        console.log(leftPharentesisCount, rightPharentesisCount)
         switch (true) {
           case (leftPharentesisCount > rightPharentesisCount) && (/[\d%.)]/)
               .test(lastEntry):

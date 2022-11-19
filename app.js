@@ -355,8 +355,8 @@ const keyupHandler = (e) => {
   removeClass(keyboardTranslate(e.key));
 };
 
-document.addEventListener('keydown', keydownHandler);
-document.addEventListener('keyup', keyupHandler);
+document.querySelector('body').addEventListener('keydown', keydownHandler);
+document.querySelector('body').addEventListener('keyup', keyupHandler);
 
 document.querySelectorAll('button').forEach((item) => {
   item.addEventListener('pointerdown', mousedownHandler);

@@ -55,6 +55,7 @@ const operateP = (arg)=> {
 
 
 const operatePEMDA = (arg) => {
+  console.clear()
   console.log('starting calculation...')
   // Autocomplete user formula, adding pharanthesis where needed
   let autoComplete = arg;

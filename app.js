@@ -1,6 +1,5 @@
 let toggleEraser = false;
 
-console.log('aaa');
 const operateA = (arg) => {
   // Break Case
   console.log('inputA', arg);
@@ -10,7 +9,6 @@ const operateA = (arg) => {
   const result = input.reduce((result, item)=> {
     return result += +item;
   }, 0);
-  console.log('A', +result);
   return result;
 };
 
@@ -73,7 +71,7 @@ const operatePEMDA = (arg) => {
 
   // Autocomplete user formula, adding x and translating % where needed
   autoComplete = autoComplete
-      .replace(/(?<closingParenthesis>(?<=[^-+x÷])\()|(?<openingParenthesis>\)(?=[^-+x÷\()]))|(?<percent>%)/g, (item)=> {
+      .replace(/(?<openingParenthesis>(?<=[^-+x÷()])\()|(?<closingParenthesis>\)(?=[^-+x÷\()]))|(?<percent>%)/g, (item)=> {
         switch (true) {
           case item === '(':
             return 'x(';
@@ -83,7 +81,6 @@ const operatePEMDA = (arg) => {
             return 'x1÷100';
         }
       });
-
   // Solving equation, starting from Pharenthesis -> MD -> addition
   const result = +(operateA(operateMD(operateP(autoComplete))));
   console.log('PEMDA', result);
@@ -285,14 +282,12 @@ const bottomScreen = (arg) => {
         break;
         // Numbers
       default:
-        console.log('test', arg);
         switch (true) {
           case lastEntry === '%':
             break;
           case lastValue === '0':
             break;
           default:
-            console.log('test2');
             screen2.textContent += arg;
             break;
         }

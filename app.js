@@ -1,8 +1,8 @@
 let toggleEraser = false;
 
+
 const operateA = (arg) => {
   // Break Case
-  console.log('inputA', arg);
   const input = arg
       .match(/(?<value>[+-]?\d*\.?\d*e[+-]?\d+)|(?<bigValue>[-+]?\d+\.?\d*)(?!e[+-]?\d+)|(?<infinity>[-+]?Infinity)/g);
   // Sum all of the value
@@ -14,7 +14,7 @@ const operateA = (arg) => {
 
 const operateMD = (arg) => {
   // Break Case, no more MD operator left
-  if (arg.search(/[x÷]/) === -1) {
+  if (!arg.match(/[x÷]/)) {
     console.log('MD', arg);
     return arg;
   }
@@ -39,7 +39,7 @@ const operateMD = (arg) => {
 
 const operateP = (arg)=> {
   // Break Case, no more pharentesis left
-  if (arg.search(/[()]/) === -1) {
+  if (!arg.match(/[()]/)) {
     console.log('P', arg);
     return arg;
   }
@@ -158,8 +158,7 @@ const bottomScreen = (arg) => {
         const rightPharentesis = screen2.textContent.match(/\)/g) ?? [];
         const rightPharentesisCount = rightPharentesis.length;
         switch (true) {
-          case (leftPharentesisCount > rightPharentesisCount) && (/[\d%.)]/)
-              .test(lastEntry):
+          case (leftPharentesisCount > rightPharentesisCount) && lastEntry.match(/[\d%.)]/):
             screen2.textContent += arg;
             break;
         }

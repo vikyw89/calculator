@@ -73,14 +73,14 @@ const operatePEMDA = (arg) => {
 
   // Autocomplete user formula, adding x and translating % where needed
   autoComplete = autoComplete
-      .replace(/(?<openingParenthesis>(?<=[^-+x÷()])\()|(?<closingParenthesis>\)(?=[^-+x÷\()]))|(?<percent>%)/g, (item)=> {
+      .replace(/(?<openingParenthesis>(?<=[^-+x÷()])\()|(?<closingParenthesis>\)(?=[^-+x÷\()%]))|(?<percent>%)/g, (item)=> {
         switch (true) {
           case item === '(':
             return 'x(';
           case item === ')':
             return ')x';
           case item === '%':
-            return 'x1÷100';
+            return '÷100';
         }
       });
 
@@ -203,12 +203,10 @@ const bottomScreen = (arg) => {
         break;
       case arg === '%':
         switch (true) {
-          case lastEntry === '÷' || lastEntry === 'x' || lastEntry === '(':
-            break;
           case !lastEntry:
             screen2.textContent += `0${arg}`;
             break;
-          default:
+          case lastEntry.match(/[\d).]/) != undefined:
             screen2.textContent += arg;
             break;
         }

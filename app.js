@@ -248,9 +248,9 @@ const bottomScreen = (arg) => {
           case !lastEntry:
             screen2.textContent = `0${arg}`;
             break;
-          case (/[.]/).test(lastValue):
+          case lastValue.match(/[.]/) != undefined:
             break;
-          default:
+          case lastValue.match(/[\d)]/) != undefined:
             screen2.textContent += arg;
             break;
         }

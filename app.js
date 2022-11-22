@@ -15,7 +15,6 @@ const operateA = (arg) => {
 const operateMD = (arg) => {
   // Break Case, no more MD operator left
   if (!arg.match(/[x÷]/)) {
-    console.log('MD', arg);
     return arg;
   }
 
@@ -40,20 +39,23 @@ const operateMD = (arg) => {
 const operateP = (arg)=> {
   // Break Case, no more pharentesis left
   if (!arg.match(/[()]/)) {
-    console.log('P', arg);
     return arg;
   }
-
+  console.log('raw equation =>', arg)
   // Solving 1 parenthesis recursively
   const result = arg.replace(/\([^()]*\)/, (item)=> {
-    const match = item.replace(/[()]/, '');
-    return operateA(operateMD(match));
+    const match = item.replace(/[()]/g, '');
+    const result = operateA(operateMD(match))
+    console.log('solving this first =>',item,'=',result)
+    return result
   });
+  console.log('solved equation =>', result)
   return operateP(result);
 };
 
 
 const operatePEMDA = (arg) => {
+  console.log('starting calculation...')
   // Autocomplete user formula, adding pharanthesis where needed
   let autoComplete = arg;
   const leftPharentesis = autoComplete.match(/\(/g) ?? [];
@@ -81,9 +83,10 @@ const operatePEMDA = (arg) => {
             return 'x1÷100';
         }
       });
+
   // Solving equation, starting from Pharenthesis -> MD -> addition
   const result = +(operateA(operateMD(operateP(autoComplete))));
-  console.log('PEMDA', result);
+  console.log('final result =>', result);
   switch (true) {
     case result < Number.MIN_SAFE_INTEGER:
       return 'Error';
@@ -158,7 +161,7 @@ const bottomScreen = (arg) => {
         const rightPharentesis = screen2.textContent.match(/\)/g) ?? [];
         const rightPharentesisCount = rightPharentesis.length;
         switch (true) {
-          case (leftPharentesisCount > rightPharentesisCount) && lastEntry.match(/[\d%.)]/):
+          case (leftPharentesisCount > rightPharentesisCount) && lastEntry.match(/[\d%.)]/) != undefined:
             screen2.textContent += arg;
             break;
         }
@@ -354,5 +357,5 @@ document.querySelector('body').addEventListener('keyup', keyupHandler);
 
 document.querySelectorAll('button').forEach((item) => {
   item.addEventListener('pointerdown', mousedownHandler);
-  item.addEventListener('pointerup', mouseupHandler);
+  item.addEventListener('pointerout', mouseupHandler);
 });

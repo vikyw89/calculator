@@ -1,6 +1,3 @@
-let toggleEraser = false;
-
-
 const operateA = (arg) => {
   // Break Case
   const input = arg
@@ -126,7 +123,6 @@ const toggle = (arg) => {
       erase.dataset.key = 'CE';
       break;
   }
-  toggleEraser = !toggleEraser;
 };
 
 const historyClickHandler = (e) => {
@@ -154,7 +150,7 @@ const bottomScreen = (arg) => {
         .match(/[-+]?([\d]+\.?[\d]*|Infinity)+$/) ?? '';
     lastEntry === 'R' || lastEntry === 'y' ? screen2.textContent = '0' : null;
 
-    if (toggleEraser) {
+    if (document.querySelector('#erase').textContent === 'AC') {
       toggle(arg);
       topScreen(`Ans = ${screen2.textContent}`);
     }

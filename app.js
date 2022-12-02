@@ -286,7 +286,7 @@ const bottomScreen = (arg) => {
         switch (true) {
           case lastEntry === '%':
             break;
-          case lastValue === '+0'|| lastValue === '-0':
+          case lastValue === '+0'|| lastValue === '-0' || lastValue === '0':
             break;
           default:
             screen2.textContent += arg;

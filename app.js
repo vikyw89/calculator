@@ -74,11 +74,15 @@ const operatePEMDA = (arg) => {
       for (let i = 0; i < difference*-1; i++) {
         autoComplete = '('+autoComplete
       }
+      break
+    case difference === 0:
+      autoComplete = '('+autoComplete+')'
+      break
   }
 
   // Autocomplete user formula, adding x and translating % where needed
   autoComplete = autoComplete
-      .replace(/(?<openingParenthesis>(?<=[^-+x÷()])\()|(?<closingParenthesis>\)(?=[^-+x÷\()%]))|(?<percent>%)/g, (item)=> {
+      .replace(/(?<openingParenthesis>(?<=[^-+x÷(])\()|(?<closingParenthesis>\)(?=[^-+x÷\()%]))|(?<percent>%)/g, (item)=> {
         switch (true) {
           case item === '(':
             return 'x(';

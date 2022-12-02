@@ -65,11 +65,15 @@ const operatePEMDA = (arg) => {
   const rightPharentesisCount = rightPharentesis.length;
   const difference = leftPharentesisCount - rightPharentesisCount;
   switch (true) {
-    case difference !== 0:
+    case difference > 0:
       for (let i = 0; i < difference; i++) {
         autoComplete += ')';
       }
       break;
+    case difference < 0:
+      for (let i = 0; i < difference*-1; i++) {
+        autoComplete = '('+autoComplete
+      }
   }
 
   // Autocomplete user formula, adding x and translating % where needed
@@ -157,12 +161,8 @@ const bottomScreen = (arg) => {
         screen2.textContent += arg;
         break;
       case arg === ')':
-        const leftPharentesis = screen2.textContent.match(/\(/g) ?? [];
-        const leftPharentesisCount = leftPharentesis.length;
-        const rightPharentesis = screen2.textContent.match(/\)/g) ?? [];
-        const rightPharentesisCount = rightPharentesis.length;
         switch (true) {
-          case (leftPharentesisCount > rightPharentesisCount) && lastEntry.match(/[\d%.)]/) != undefined:
+          case lastEntry.match(/[\d%.)]/) != undefined:
             screen2.textContent += arg;
             break;
         }

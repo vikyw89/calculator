@@ -142,159 +142,159 @@ const history = (arg) => {
 
 const bottomScreen = (arg) => {
   const screen2 = document.querySelector('.screen2');
-    screen2.textContent === '0' ? screen2.textContent = null : null;
+  screen2.textContent === '0' ? screen2.textContent = null : null;
 
-    const [lastEntry] = screen2.textContent
-        .match(/.$/) ?? '';
-    const [lastValue] = screen2.textContent
-        .match(/[-+]?([\d]+\.?[\d]*|Infinity)+$/) ?? '';
-    lastEntry === 'R' || lastEntry === 'y' ? screen2.textContent = '0' : null;
+  const [lastEntry] = screen2.textContent
+      .match(/.$/) ?? '';
+  const [lastValue] = screen2.textContent
+      .match(/[-+]?([\d]+\.?[\d]*|Infinity)+$/) ?? '';
+  lastEntry === 'R' || lastEntry === 'y' ? screen2.textContent = '0' : null;
 
-    if (document.querySelector('#erase').textContent === 'AC') {
-      toggle(arg);
-      topScreen(`Ans = ${screen2.textContent}`);
-    }
+  if (document.querySelector('#erase').textContent === 'AC') {
+    toggle(arg);
+    topScreen(`Ans = ${screen2.textContent}`);
+  }
 
-    switch (true) {
-      // Pharenthesis
-      case arg === '(':
-        screen2.textContent += arg;
-        break;
-      case arg === ')':
-        switch (true) {
-          case lastEntry.match(/[\d%.)]/) != undefined:
-            screen2.textContent += arg;
-            break;
-        }
-        break;
-        // Multiplier
-      case arg === 'x':
-        switch (true) {
-          default:
-            screen2.textContent += arg;
-            break;
-          case lastEntry === 'x'|| lastEntry === '-' || lastEntry === '(':
-            break;
-          case lastEntry === '÷':
-            screen2.textContent = screen2.textContent.match(/.*(?=.$)/);
-            screen2.textContent += arg;
-            break;
-          case !lastEntry:
-            screen2.textContent += '0';
-            screen2.textContent += arg;
-            break;
-        }
-        break;
-        // Divider
-      case arg === '÷':
-        switch (true) {
-          default:
-            screen2.textContent += arg;
-            break;
-          case lastEntry === '÷'|| lastEntry === '(' || lastEntry === '-':
-            break;
-          case lastEntry === 'x':
-            screen2.textContent = screen2.textContent.match(/.*(?=.$)/);
-            screen2.textContent += arg;
-            break;
-          case !lastEntry:
-            screen2.textContent += `0${arg}`;
-            break;
-        }
-        break;
-      case arg === '%':
-        switch (true) {
-          case !lastEntry:
-            screen2.textContent += `0${arg}`;
-            break;
-          case lastEntry.match(/[\d).]/) != undefined:
-            screen2.textContent += arg;
-            break;
-        }
-        break;
-        // Addition
-      case arg === '-':
-        switch (true) {
-          default:
-            screen2.textContent += arg;
-            break;
-          case lastEntry === '-':
-            break;
-          case lastEntry === '+':
-            screen2.textContent = `${screen2.textContent
-                .match(/.*(?=.$)/)}${arg}`;
-            break;
-        }
-        break;
-      case arg === '+':
-        switch (true) {
-          default:
-            screen2.textContent += arg;
-            break;
-          case lastEntry === '+':
-            break;
-          case lastEntry === '-':
-            screen2.textContent = `${screen2.textContent
-                .match(/.*(?=.$)/)}${arg}`;
-            break;
-        }
-        break;
-        // dot
-      case arg === '.':
-        switch (true) {
-          case lastEntry === '.' || lastEntry === '-'|| lastEntry === '+':
-            break;
-          case !lastEntry:
-            screen2.textContent = `0${arg}`;
-            break;
-          case lastValue.match(/[.]/) != undefined:
-            break;
-          case lastValue.match(/[\d)]/) != undefined:
-            screen2.textContent += arg;
-            break;
-        }
-        break;
-        // CE
-      case arg === 'CE':
-        switch (true) {
-          case lastEntry === 'y':
-            screen2.textContent = screen2.textContent.replace('Infinity', '');
-            break;
-          default:
-            screen2.textContent = screen2.textContent.match(/.*(?=.$)/);
-            break;
-        }
-        break;
-        // AC
-      case arg === 'AC':
-        screen2.textContent = '0';
-        break;
-        // Equal
-      case arg === '=':
-        switch (true) {
-          case (/[\d.)%]/).test(lastEntry):
-            const result = operatePEMDA(screen2.textContent);
-            history(`${screen2.textContent} = ${result}`);
-            topScreen(`${screen2.textContent} =`);
-            screen2.textContent = result;
-            toggle(arg);
-            break;
-        }
-        break;
-        // Numbers
-      default:
-        switch (true) {
-          case lastEntry === '%':
-            break;
-          case lastValue === '+0'|| lastValue === '-0' || lastValue === '0':
-            break;
-          default:
-            screen2.textContent += arg;
-            break;
-        }
-        break;
-    }
-    !screen2.textContent ? screen2.textContent = 0 : null;
+  switch (true) {
+    // Pharenthesis
+    case arg === '(':
+      screen2.textContent += arg;
+      break;
+    case arg === ')':
+      switch (true) {
+        case lastEntry.match(/[\d%.)]/) != undefined:
+          screen2.textContent += arg;
+          break;
+      }
+      break;
+      // Multiplier
+    case arg === 'x':
+      switch (true) {
+        default:
+          screen2.textContent += arg;
+          break;
+        case lastEntry === 'x'|| lastEntry === '-' || lastEntry === '(':
+          break;
+        case lastEntry === '÷':
+          screen2.textContent = screen2.textContent.match(/.*(?=.$)/);
+          screen2.textContent += arg;
+          break;
+        case !lastEntry:
+          screen2.textContent += '0';
+          screen2.textContent += arg;
+          break;
+      }
+      break;
+      // Divider
+    case arg === '÷':
+      switch (true) {
+        default:
+          screen2.textContent += arg;
+          break;
+        case lastEntry === '÷'|| lastEntry === '(' || lastEntry === '-':
+          break;
+        case lastEntry === 'x':
+          screen2.textContent = screen2.textContent.match(/.*(?=.$)/);
+          screen2.textContent += arg;
+          break;
+        case !lastEntry:
+          screen2.textContent += `0${arg}`;
+          break;
+      }
+      break;
+    case arg === '%':
+      switch (true) {
+        case !lastEntry:
+          screen2.textContent += `0${arg}`;
+          break;
+        case lastEntry.match(/[\d).]/) != undefined:
+          screen2.textContent += arg;
+          break;
+      }
+      break;
+      // Addition
+    case arg === '-':
+      switch (true) {
+        default:
+          screen2.textContent += arg;
+          break;
+        case lastEntry === '-':
+          break;
+        case lastEntry === '+':
+          screen2.textContent = `${screen2.textContent
+              .match(/.*(?=.$)/)}${arg}`;
+          break;
+      }
+      break;
+    case arg === '+':
+      switch (true) {
+        default:
+          screen2.textContent += arg;
+          break;
+        case lastEntry === '+':
+          break;
+        case lastEntry === '-':
+          screen2.textContent = `${screen2.textContent
+              .match(/.*(?=.$)/)}${arg}`;
+          break;
+      }
+      break;
+      // dot
+    case arg === '.':
+      switch (true) {
+        case lastEntry === '.' || lastEntry === '-'|| lastEntry === '+':
+          break;
+        case !lastEntry:
+          screen2.textContent = `0${arg}`;
+          break;
+        case lastValue.match(/[.]/) != undefined:
+          break;
+        case lastValue.match(/[\d)]/) != undefined:
+          screen2.textContent += arg;
+          break;
+      }
+      break;
+      // CE
+    case arg === 'CE':
+      switch (true) {
+        case lastEntry === 'y':
+          screen2.textContent = screen2.textContent.replace('Infinity', '');
+          break;
+        default:
+          screen2.textContent = screen2.textContent.match(/.*(?=.$)/);
+          break;
+      }
+      break;
+      // AC
+    case arg === 'AC':
+      screen2.textContent = '0';
+      break;
+      // Equal
+    case arg === '=':
+      switch (true) {
+        case (/[\d.)%]/).test(lastEntry):
+          const result = operatePEMDA(screen2.textContent);
+          history(`${screen2.textContent} = ${result}`);
+          topScreen(`${screen2.textContent} =`);
+          screen2.textContent = result;
+          toggle(arg);
+          break;
+      }
+      break;
+      // Numbers
+    default:
+      switch (true) {
+        case lastEntry === '%':
+          break;
+        case lastValue === '+0'|| lastValue === '-0' || lastValue === '0':
+          break;
+        default:
+          screen2.textContent += arg;
+          break;
+      }
+      break;
+  }
+  !screen2.textContent ? screen2.textContent = 0 : null;
 };
 
 const screenHandler = (arg) => {

@@ -72,9 +72,9 @@ const operatePEMDA = (arg) => {
         autoComplete = '('+autoComplete
       }
       break
-    case difference === 0:
-      autoComplete = '('+autoComplete+')'
-      break
+  }
+  for (let i = 0; i < leftPharentesisCount; i++) {
+    autoComplete = '('+autoComplete+')'
   }
 
   // Autocomplete user formula, adding x and translating % where needed
